@@ -1,0 +1,20 @@
+ChurchPresenter is a Windows desktop application that can present song lyrics and bible verses.
+
+There's bibles and theres songs.
+
+[Songs]
+A user should be able to:
+  - view songs (Preview)
+  - edit songs
+  - delete songs
+  - create songs
+
+[ServiceOrder]
+A user should be able to:
+  - add a slide grouping
+  - remove a slide grouping
+
+[Slide grouping]
+A slide grouping can be either:
+  - a song, where each 2 lines is a slide
+  - a scripture where each verse is a slide
