@@ -12,17 +12,18 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingAString_messageContainsFinBit()
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
 
             // Act
             await sut.WriteString("test");
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var finBit = GetFinBit(memory);
             Assert.That(finBit, Is.True);
         }
+
 
         private bool GetFinBit(byte[] memory)
         {
@@ -33,15 +34,15 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingAString_RsvBitsAreLeftAs0()
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
 
             // Act
             await sut.WriteString("test");
 
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var rsvBits = GetReserveBits(memory);
             Assert.That(rsvBits.Item1, Is.False);
             Assert.That(rsvBits.Item2, Is.False);
@@ -60,14 +61,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingAString_FrameOpCodeIsSetToStringAsync()
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
 
             // Act
             await sut.WriteString("test");
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var opCode = GetOpCode(memory);
             Assert.That(opCode, Is.EqualTo(0x01));
         }
@@ -81,14 +82,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingAString_MaskBitIsNotSet()
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
 
             // Act
             await sut.WriteString("test");
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var maskBit = GetMaskBit(memory);
             Assert.That(maskBit, Is.False);
         }
@@ -105,15 +106,15 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingAShortString_PayloadLengthIsMessageLength(int messageLength)
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
             var message = CreateStringOfLength(messageLength);
 
             // Act
             await sut.WriteString(message);
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var payloadLength = GetPayloadLength(memory);
             Assert.That(payloadLength, Is.EqualTo(messageLength));
         }
@@ -125,15 +126,15 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingAMediumString_PayloadLengthIs126AndExtendedPayloadContainsMessageLength(int messageLength)
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
             var message = CreateStringOfLength(messageLength);
 
             // Act
             await sut.WriteString(message);
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var payloadLength = GetPayloadLength(memory);
             Assert.That(payloadLength, Is.EqualTo(126));
             var extendedPayloadBytes = memory.AsSpan(2, 2).ToArray();
@@ -151,15 +152,15 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenWritingALongString_PayloadLengthIs127AndExtendedPayloadContainsMessageLength(int messageLength)
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
             var message = CreateStringOfLength(messageLength);
 
             // Act
             await sut.WriteString(message);
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var payloadLength = GetPayloadLength(memory);
             Assert.That(payloadLength, Is.EqualTo(127));
             var extendedPayloadBytes = memory.AsSpan(2, 8).ToArray();
@@ -174,8 +175,8 @@ namespace ChurchPresenter.WebSocketServer.Tests
         public async Task whenAStringWithNonAsciiCharacters_PayloadContainsUt8EncodedText()
         {
             // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
+            var fixture = CreateFixture();
+            var sut = fixture.sut;
             var message = "κόσμε";
             var expectedMessageLength = 11;
 
@@ -183,11 +184,24 @@ namespace ChurchPresenter.WebSocketServer.Tests
             await sut.WriteString(message);
 
             // Assert
-            var memory = memStream.ToArray();
+            var memory = fixture.memStream.ToArray();
             var payloadLength = GetPayloadLength(memory);
             Assert.That(payloadLength, Is.EqualTo(expectedMessageLength));
             var decodedPayload = Encoding.UTF8.GetString(memory.AsSpan(2, expectedMessageLength));
             Assert.That(decodedPayload, Is.EqualTo(message));
+        }
+
+        struct WebSocketStreamManagerFixture
+        {
+            public MemoryStream memStream;
+            public WebSocketStreamManager sut;
+        }
+
+        private static WebSocketStreamManagerFixture CreateFixture()
+        {
+            var memStream = new MemoryStream(100);
+            var sut = new WebSocketStreamManager(memStream, manager => { }, manager => { });
+            return new WebSocketStreamManagerFixture { memStream = memStream, sut = sut };
         }
 
         private static string CreateStringOfLength(int length)
