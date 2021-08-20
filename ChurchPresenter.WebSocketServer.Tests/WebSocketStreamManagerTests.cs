@@ -20,7 +20,13 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[0] & 0b0001, Is.EqualTo(1));
+            var finBit = GetFinBit(memory);
+            Assert.That(finBit, Is.True);
+        }
+
+        private bool GetFinBit(byte[] memory)
+        {
+            return (memory[0] >> 7) == 1;
         }
 
         [Test]
@@ -36,7 +42,18 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[0] & 0b1110, Is.EqualTo(0b0000));
+            var rsvBits = GetReserveBits(memory);
+            Assert.That(rsvBits.Item1, Is.False);
+            Assert.That(rsvBits.Item2, Is.False);
+            Assert.That(rsvBits.Item3, Is.False);
+        }
+
+        private Tuple<bool, bool, bool> GetReserveBits(byte[] memory)
+        {
+            return new Tuple<bool, bool, bool>(
+                (memory[0] & 0b01000000) > 0,
+                (memory[0] & 0b00100000) > 0,
+                (memory[0] & 0b00010000) > 0);
         }
 
         [Test]
@@ -51,7 +68,13 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That((memory[0] >> 4) & 0b1111, Is.EqualTo(0x01));
+            var opCode = GetOpCode(memory);
+            Assert.That(opCode, Is.EqualTo(0x01));
+        }
+
+        public int GetOpCode(byte[] memory)
+        {
+            return memory[0] & 0b00001111;
         }
 
         [Test]
@@ -66,25 +89,13 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[1] >> 7, Is.EqualTo(0));
+            var maskBit = GetMaskBit(memory);
+            Assert.That(maskBit, Is.False);
         }
 
-        [Test]
-        public async Task whenWritingAString_MaskKeyIsNotSet()
+        public bool GetMaskBit(byte[] memory)
         {
-            // Arrange
-            var memStream = new MemoryStream(100);
-            WebSocketStreamManager sut = new WebSocketStreamManager(memStream);
-
-            // Act
-            await sut.WriteString("test");
-
-            // Assert
-            var memory = memStream.ToArray();
-            Assert.That(memory[2], Is.EqualTo(0));
-            Assert.That(memory[3], Is.EqualTo(0));
-            Assert.That(memory[4], Is.EqualTo(0));
-            Assert.That(memory[5], Is.EqualTo(0));
+            return (memory[1] >> 7) == 1;
         }
 
         [TestCase(4)]
@@ -103,7 +114,8 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[1], Is.EqualTo(messageLength));
+            var payloadLength = GetPayloadLength(memory);
+            Assert.That(payloadLength, Is.EqualTo(messageLength));
         }
 
         [TestCase(126)]
@@ -122,8 +134,13 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[1], Is.EqualTo(126));
+            var payloadLength = GetPayloadLength(memory);
+            Assert.That(payloadLength, Is.EqualTo(126));
             var extendedPayloadBytes = memory.AsSpan(2, 2).ToArray();
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(extendedPayloadBytes);
+
             Assert.That(BitConverter.ToUInt16(extendedPayloadBytes), Is.EqualTo(messageLength));
         }
 
@@ -143,9 +160,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[1], Is.EqualTo(127));
-            var extendedPayloadBytes = memory.AsSpan(2, 4).ToArray();
-            Assert.That(BitConverter.ToUInt32(extendedPayloadBytes), Is.EqualTo(messageLength));
+            var payloadLength = GetPayloadLength(memory);
+            Assert.That(payloadLength, Is.EqualTo(127));
+            var extendedPayloadBytes = memory.AsSpan(2, 8).ToArray();
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(extendedPayloadBytes);
+            
+            Assert.That(BitConverter.ToUInt64(extendedPayloadBytes), Is.EqualTo(messageLength));
         }
 
         [Test]
@@ -162,14 +184,20 @@ namespace ChurchPresenter.WebSocketServer.Tests
 
             // Assert
             var memory = memStream.ToArray();
-            Assert.That(memory[1], Is.EqualTo(expectedMessageLength));
-            var decodedPayload = Encoding.UTF8.GetString(memory.AsSpan(6, 11));
+            var payloadLength = GetPayloadLength(memory);
+            Assert.That(payloadLength, Is.EqualTo(expectedMessageLength));
+            var decodedPayload = Encoding.UTF8.GetString(memory.AsSpan(2, expectedMessageLength));
             Assert.That(decodedPayload, Is.EqualTo(message));
         }
 
         private static string CreateStringOfLength(int length)
         {
             return new string('_', length);
+        }
+
+        private static int GetPayloadLength(byte[] memory)
+        {
+            return memory[1] & 0x7F;
         }
     }
 }

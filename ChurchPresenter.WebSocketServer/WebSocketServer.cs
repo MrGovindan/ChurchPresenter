@@ -11,11 +11,18 @@ namespace ChurchPresenter.WebSocketServer
     {
         private TcpListener server;
         private List<TcpClient> clients = new List<TcpClient>();
+        private WebSocketStreamManager manager;
 
         public WebSocketServer(IPEndPoint endPoint)
         {
+            Console.WriteLine("Starting WebSockerServer");
             server = new TcpListener(endPoint);
             server.Start();
+            StartAccept();
+        }
+
+        private void StartAccept()
+        {
             server.AcceptTcpClientAsync().ContinueWith(HandleAccept, null);
         }
 
@@ -24,7 +31,14 @@ namespace ChurchPresenter.WebSocketServer
             if (acceptClientTask.IsCompletedSuccessfully)
             {
                 var client = acceptClientTask.Result;
+                manager = new WebSocketStreamManager(client.GetStream());
             }
+            StartAccept();
+        }
+
+        public void WriteString(string v)
+        {
+            manager.WriteString(v);
         }
     }
 }
