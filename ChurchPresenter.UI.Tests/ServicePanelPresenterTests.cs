@@ -63,13 +63,13 @@ namespace ChurchPresenter.UI.Tests
             public readonly ServicePanelPresenter sut;
             public readonly IServicePanelView view;
             public readonly IServiceModel model;
-            public readonly ISongSelectedPublisher songSelectedPublisher;
+            public readonly ISelectedSongPublisher songSelectedPublisher;
 
             public ServicePanelPresenterTestFixture(
                 ServicePanelPresenter sut,
                 IServicePanelView view,
                 IServiceModel model,
-                ISongSelectedPublisher songSelectedPublisher)
+                ISelectedSongPublisher songSelectedPublisher)
             {
                 this.sut = sut;
                 this.view = view;
@@ -82,7 +82,7 @@ namespace ChurchPresenter.UI.Tests
         {
             var model = new ServiceModel();
             var view = Substitute.For<IServicePanelView>();
-            var songSelectedPublisher = Substitute.For<ISongSelectedPublisher>();
+            var songSelectedPublisher = Substitute.For<ISelectedSongPublisher>();
             var sut = new ServicePanelPresenter(view, model, songSelectedPublisher);
             return new ServicePanelPresenterTestFixture(sut, view, model, songSelectedPublisher);
         }

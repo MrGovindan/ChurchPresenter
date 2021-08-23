@@ -57,7 +57,7 @@ namespace ChurchPresenter.UI.WpfViews
 
         public void SelectSlide(int index)
         {
-            ((ListBoxItem)SlideList.Items[0]).IsSelected = true;
+            ((ListBoxItem)SlideList.Items[index]).IsSelected = true;
         }
     }
 }

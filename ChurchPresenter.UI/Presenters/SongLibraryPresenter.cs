@@ -35,7 +35,7 @@ namespace ChurchPresenter.UI.Presenters
         public SongLibraryPresenter(
             ISongLibraryView view,
             ISongLibrary songLibrary,
-            [KeyFilter("Preview")] ISongSelectedPublisher selectedSongPublisher,
+            [KeyFilter("Preview")] ISelectedSongPublisher selectedSongPublisher,
             IServiceModel serviceModel)
         {
             this.view = view;

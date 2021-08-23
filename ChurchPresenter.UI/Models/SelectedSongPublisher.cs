@@ -5,11 +5,11 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    class SongSelectedPublisher : ISongSelectedPublisher
+    class SelectedSongPublisher : ISelectedSongPublisher
     {
         public event Action<Song> SelectedSongChanged;
 
-        public SongSelectedPublisher()
+        public SelectedSongPublisher()
         {
             Debug.WriteLine("SongSelectedPublisher created");
         }

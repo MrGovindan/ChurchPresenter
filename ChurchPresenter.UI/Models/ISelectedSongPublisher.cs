@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    public interface ISongSelectedPublisher
+    public interface ISelectedSongPublisher
     {
         event Action<Song> SelectedSongChanged;
         void PublishSelectedSong(Song song);

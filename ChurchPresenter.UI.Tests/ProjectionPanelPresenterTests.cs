@@ -16,7 +16,7 @@ namespace ChurchPresenter.UI.Tests
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().WithTitle("Bombastic").Build();
+            var testSong = new SongBuilder().WithTitle("Bombastic").WithLyrics(testLyrics).Build();
 
             // Act
             fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
@@ -30,7 +30,7 @@ namespace ChurchPresenter.UI.Tests
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().Build();
+            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
 
             // Act
             fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
@@ -40,17 +40,33 @@ namespace ChurchPresenter.UI.Tests
         }
 
         [Test]
-        public void WhenASongIsSelected_TheFirstSlideIsSelected()
+        public void WhenASongIsSelected_TheFirstSlideIsPublishedAsSelected()
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().Build();
+            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
 
             // Act
             fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
 
             // Assert
-            fixture.view.Received().SelectSlide(0);
+            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testSong.slides[0]);
+        }
+
+        [Test]
+        public void WhenNotifiedOfASelectedSlide_SlideIsSelectedOnView()
+        {
+            // Arrange
+            var fixture = CreateFixture();
+            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
+            fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
+
+            // Act
+            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testSong.slides[1]);
+
+            // Assert
+            fixture.view.Received().SelectSlide(1);
+            fixture.view.Received().SetPreviewText("Foo Bar Baz");
         }
 
         private static string testLyrics = @"<?xml version='1.0' encoding='UTF-8'?>
@@ -66,7 +82,7 @@ namespace ChurchPresenter.UI.Tests
 </song>";
 
         [Test]
-        public void GivenASelectedSong_WhenASlideIsSelected_PreviewTextIsChangedToSlideText()
+        public void GivenASelectedSong_WhenASlideIsSelected_SlideSelectionIsPublished()
         {
             // Arrange
             var fixture = CreateFixture();
@@ -77,12 +93,13 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.SlideSelected += Raise.Event<Action<int>>(1);
 
             // Assert
-            fixture.view.Received().SetPreviewText("Foo Bar Baz");
+            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testSong.slides[1]);
         }
 
         struct PreviewPanelPresenterTestsFixture
         {
-            public ISongSelectedPublisher selectedSongPublisher;
+            public ISelectedSlidePublisher selectedSlidePublisher;
+            public ISelectedSongPublisher selectedSongPublisher;
             public IProjectionView view;
             public ProjectionPanelPresenter sut;
         }
@@ -90,9 +107,10 @@ namespace ChurchPresenter.UI.Tests
         private PreviewPanelPresenterTestsFixture CreateFixture()
         {
             var fixture = new PreviewPanelPresenterTestsFixture();
-            fixture.selectedSongPublisher = Substitute.For<ISongSelectedPublisher>();
+            fixture.selectedSlidePublisher = Substitute.For<ISelectedSlidePublisher>();
+            fixture.selectedSongPublisher = Substitute.For<ISelectedSongPublisher>();
             fixture.view = Substitute.For<IProjectionView>();
-            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedSongPublisher);
+            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedSongPublisher, fixture.selectedSlidePublisher);
             return fixture;
         }
     }

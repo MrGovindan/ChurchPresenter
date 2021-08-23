@@ -20,10 +20,10 @@ namespace ChurchPresenter.UI.Presenters
     {
         public LivePanelPresenter(
             [KeyFilter("Live")] IProjectionView view,
-            [KeyFilter("Live")] ISongSelectedPublisher selectedSongPublisher,
-            IProjector projector) : base(view, selectedSongPublisher)
+            [KeyFilter("Live")] ISelectedSongPublisher selectedSongPublisher,
+            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher)
+            : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
-            view.SlideSelected += index => projector.Show(currentSong.slides[index].text);
         }
     }
 
@@ -31,7 +31,9 @@ namespace ChurchPresenter.UI.Presenters
     {
         public PreviewPanelPresenter(
             [KeyFilter("Preview")] IProjectionView view,
-            [KeyFilter("Preview")] ISongSelectedPublisher selectedSongPublisher) : base(view, selectedSongPublisher)
+            [KeyFilter("Preview")] ISelectedSongPublisher selectedSongPublisher,
+            [KeyFilter("Preview")] ISelectedSlidePublisher selectedSlidePublisher)
+            : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
         }
     }
@@ -40,21 +42,35 @@ namespace ChurchPresenter.UI.Presenters
     {
         private IProjectionView view;
         protected Song currentSong;
+        private ISelectedSlidePublisher selectedSlidePublisher;
 
-        public ProjectionPanelPresenter(IProjectionView view, ISongSelectedPublisher selectedSongPublisher)
+        public ProjectionPanelPresenter(
+            IProjectionView view,
+            ISelectedSongPublisher selectedSongPublisher,
+            ISelectedSlidePublisher selectedSlidePublisher)
         {
             this.view = view;
+            this.selectedSlidePublisher = selectedSlidePublisher;
 
             selectedSongPublisher.SelectedSongChanged += HandleSongSelected;
-            view.SlideSelected += index => view.SetPreviewText(currentSong.slides[index].text);
+            view.SlideSelected += index => selectedSlidePublisher.PublishSelectedSlide(currentSong.slides[index]);
+            selectedSlidePublisher.SelectedSlideChanged += HandleSlideSeleted;
         }
+
 
         private void HandleSongSelected(Song song)
         {
             currentSong = song;
             view.SetTitle(song.title);
             view.SetSlides(song.slides);
-            view.SelectSlide(0);
+            selectedSlidePublisher.PublishSelectedSlide(song.slides[0]);
         }
+        private void HandleSlideSeleted(Slide selectedSlide)
+        {
+            view.SelectSlide(GetIndexOfSlide(selectedSlide));
+            view.SetPreviewText(selectedSlide.text);
+        }
+
+        private int GetIndexOfSlide(Slide selectedSlide) => new List<Slide>(currentSong.slides).IndexOf(selectedSlide);
     }
 }

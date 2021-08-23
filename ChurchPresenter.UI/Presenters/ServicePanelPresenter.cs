@@ -22,7 +22,7 @@ namespace ChurchPresenter.UI.Presenters
         public ServicePanelPresenter(
             IServicePanelView view,
             IServiceModel model,
-            [KeyFilter("Live")] ISongSelectedPublisher songSelectedPublisher)
+            [KeyFilter("Live")] ISelectedSongPublisher songSelectedPublisher)
         {
             this.view = view;
             this.model = model;

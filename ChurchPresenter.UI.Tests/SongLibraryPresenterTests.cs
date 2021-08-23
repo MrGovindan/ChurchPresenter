@@ -159,7 +159,7 @@ namespace ChurchPresenter.UI.Tests
             var songLibrary = Substitute.For<ISongLibrary>();
             songLibrary.GetAllSongs().Returns(songList);
             var view = Substitute.For<ISongLibraryView>();
-            var publisher = Substitute.For<ISongSelectedPublisher>();
+            var publisher = Substitute.For<ISelectedSongPublisher>();
             var presenter = CreateSut(view, songLibrary, publisher);
 
             // Act
@@ -193,11 +193,11 @@ namespace ChurchPresenter.UI.Tests
         private static SongLibraryPresenter CreateSut(
             ISongLibraryView view,
             ISongLibrary songLibrary,
-            ISongSelectedPublisher selectedSongPublisher = null,
+            ISelectedSongPublisher selectedSongPublisher = null,
             IServiceModel serviceModel = null)
         {
             if (selectedSongPublisher == null)
-                selectedSongPublisher = Substitute.For<ISongSelectedPublisher>();
+                selectedSongPublisher = Substitute.For<ISelectedSongPublisher>();
             if (serviceModel == null)
                 serviceModel = Substitute.For<IServiceModel>();
 

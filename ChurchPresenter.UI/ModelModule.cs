@@ -12,10 +12,12 @@ namespace ChurchPresenter.UI
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<SongLibrary>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<SongSelectedPublisher>().Keyed<ISongSelectedPublisher>("Preview").SingleInstance();
-            builder.RegisterType<SongSelectedPublisher>().Keyed<ISongSelectedPublisher>("Live").SingleInstance();
+            builder.RegisterType<SelectedSongPublisher>().Keyed<ISelectedSongPublisher>("Preview").SingleInstance();
+            builder.RegisterType<SelectedSongPublisher>().Keyed<ISelectedSongPublisher>("Live").SingleInstance();
+            builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSlidePublisher>("Preview").SingleInstance();
+            builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSlidePublisher>("Live").SingleInstance();
             builder.RegisterType<ServiceModel>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<LiveProjector>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<WebBrowserProjector>().AsImplementedInterfaces().AutoActivate().SingleInstance().WithAttributeFiltering();
         }
     }
 }
