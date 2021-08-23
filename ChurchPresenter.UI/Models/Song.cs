@@ -6,7 +6,7 @@ using System.Xml;
 
 namespace ChurchPresenter.UI.Models
 {
-    public readonly struct Slide
+    public class Slide
     {
         public readonly string text;
 

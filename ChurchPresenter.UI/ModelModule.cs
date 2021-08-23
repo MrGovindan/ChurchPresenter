@@ -16,6 +16,7 @@ namespace ChurchPresenter.UI
             builder.RegisterType<SelectedSongPublisher>().Keyed<ISelectedSongPublisher>("Live").SingleInstance();
             builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSlidePublisher>("Preview").SingleInstance();
             builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSlidePublisher>("Live").SingleInstance();
+            builder.RegisterType<SlideVisibilityPublisher>().As<ISlideVisibilityPublisher>().SingleInstance();
             builder.RegisterType<ServiceModel>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<WebBrowserProjector>().AsImplementedInterfaces().AutoActivate().SingleInstance().WithAttributeFiltering();
         }

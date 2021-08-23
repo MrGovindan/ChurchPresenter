@@ -14,6 +14,9 @@
     <Compile Update="WpfViews\ServiceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="WpfViews\SlideControlButtonsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="WpfViews\SongEntry.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -35,6 +38,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WpfViews\ServiceView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\SlideControlButtonsView.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="WpfViews\SongEntry.xaml">

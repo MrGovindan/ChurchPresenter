@@ -14,6 +14,7 @@ namespace ChurchPresenter.UI.Presenters
         void SetSlides(Slide[] slides);
         void SetPreviewText(string text);
         void SelectSlide(int index);
+        void SetPreviewTextVisible(bool visible);
     }
 
     class LivePanelPresenter : ProjectionPanelPresenter
@@ -21,9 +22,11 @@ namespace ChurchPresenter.UI.Presenters
         public LivePanelPresenter(
             [KeyFilter("Live")] IProjectionView view,
             [KeyFilter("Live")] ISelectedSongPublisher selectedSongPublisher,
-            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher)
+            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher,
+            ISlideVisibilityPublisher slideVisibilityPublisher)
             : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
+            slideVisibilityPublisher.SlideVisibilityChanged += view.SetPreviewTextVisible;
         }
     }
 

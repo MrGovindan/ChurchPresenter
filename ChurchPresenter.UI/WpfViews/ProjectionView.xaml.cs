@@ -11,10 +11,13 @@ namespace ChurchPresenter.UI.WpfViews
     {
         public event Action<int> SlideSelected;
 
-        protected ProjectionView(string heading)
+        protected ProjectionView(string heading, SlideControlButtonsView slideControlButtonsView)
         {
             InitializeComponent();
             Heading.Text = heading;
+
+            Children.Add(slideControlButtonsView);
+            Grid.SetRow(slideControlButtonsView, 3);
         }
 
         public void SetSlides(Slide[] slides)
@@ -58,6 +61,12 @@ namespace ChurchPresenter.UI.WpfViews
         public void SelectSlide(int index)
         {
             ((ListBoxItem)SlideList.Items[index]).IsSelected = true;
+        }
+
+        public void SetPreviewTextVisible(bool visible)
+        {
+            foreach (UIElement child in PreviewGrid.Children)
+                child.Visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
     }
 }

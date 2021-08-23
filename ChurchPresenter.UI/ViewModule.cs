@@ -10,14 +10,14 @@ namespace ChurchPresenter.UI
 {
     public class PreviewProjectionView : ProjectionView
     {
-        public PreviewProjectionView() : base("Preview")
+        public PreviewProjectionView(PreviewSlideControlButtonsView slideControlButtonsView) : base("Preview", slideControlButtonsView)
         {
         }
     }
 
     public class LiveProjectionView : ProjectionView
     {
-        public LiveProjectionView() : base("Live")
+        public LiveProjectionView(LiveSlideControlButtonsView slideControlButtonsView) : base("Live", slideControlButtonsView)
         {
         }
     }
@@ -33,6 +33,8 @@ namespace ChurchPresenter.UI
             builder.RegisterType<LibraryContentPanelFactory>().As<ILibraryContentFactory<Panel>>().SingleInstance();
             builder.RegisterType<PreviewProjectionView>().AsSelf().Keyed<IProjectionView>("Preview").SingleInstance();
             builder.RegisterType<LiveProjectionView>().AsSelf().Keyed<IProjectionView>("Live").SingleInstance();
+            builder.RegisterType<PreviewSlideControlButtonsView>().AsSelf().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<LiveSlideControlButtonsView>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<MainWindow>().SingleInstance();
         }
     }

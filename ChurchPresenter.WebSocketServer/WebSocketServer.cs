@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -29,6 +30,8 @@ namespace ChurchPresenter.WebSocketServer
         {
             if (acceptClientTask.IsCompletedSuccessfully)
                 CreateNewClient(acceptClientTask.Result);
+
+            Debug.WriteLine("Current client count: " + clients.Count);
 
             StartAccept();
         }

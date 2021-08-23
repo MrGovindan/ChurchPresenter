@@ -9,11 +9,6 @@ namespace ChurchPresenter.UI.Models
     {
         public event Action<Slide> SelectedSlideChanged;
 
-        public SelectedSlidePublisher()
-        {
-            Debug.WriteLine("SelectedSlidePublisher created");
-        }
-
         public void PublishSelectedSlide(Slide slide)
         {
             SelectedSlideChanged?.Invoke(slide);

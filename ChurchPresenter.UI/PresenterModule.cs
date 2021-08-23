@@ -18,6 +18,8 @@ namespace ChurchPresenter.UI
             builder.RegisterType<LivePanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<PreviewPanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<ServicePanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
+            builder.RegisterType<LiveSlideControlButtonsPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
+            builder.RegisterType<PreviewSlideControlButtonsPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
         }
     }
 }

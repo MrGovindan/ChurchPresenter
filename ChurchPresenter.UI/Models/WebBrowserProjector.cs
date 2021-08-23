@@ -9,16 +9,29 @@ namespace ChurchPresenter.UI.Models
     public class WebBrowserProjector
     {
         WebSocketServer.WebSocketServer server;
-        public WebBrowserProjector([KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher)
+        bool slideVisible = true;
+        string currentSlide = "";
+
+        public WebBrowserProjector(
+            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher,
+            ISlideVisibilityPublisher slideVisibilityPublisher)
         {
             server = new WebSocketServer.WebSocketServer(new IPEndPoint(IPAddress.Loopback, 5000));
 
-            selectedSlidePublisher.SelectedSlideChanged += slide => Show(slide.text);
+            selectedSlidePublisher.SelectedSlideChanged += slide =>
+            {
+                currentSlide = slide.text.Replace("\n", "<br>");
+                Show();
+            };
+            slideVisibilityPublisher.SlideVisibilityChanged += visible =>
+            {
+                slideVisible = visible;
+                Show();
+            };
         }
-        private void Show(string content)
+        private void Show()
         {
-            content = content.Replace("\n", "<br>");
-            server.WriteString(content);
+            server.WriteString(slideVisible ? currentSlide : "");
         }
     }
 }

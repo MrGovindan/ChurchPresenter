@@ -10,6 +10,7 @@
         <RowDefinition Height="auto"/>
         <RowDefinition Height="auto"/>
         <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
         <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
@@ -18,12 +19,12 @@
 
     <ListBox Name="SlideList" Grid.Row="2" Margin="5">
     </ListBox>
-    <Viewbox Grid.Row="3" Margin="5" Stretch="Uniform" StretchDirection="Both">
+    <Viewbox Grid.Row="4" Margin="5" Stretch="Uniform" StretchDirection="Both">
         <Border BorderBrush="Black" BorderThickness="1">
         <Grid Name ="PreviewGrid" Background="White" Width="1920" Height="1080">
             <TextBlock 
                 Text="" 
-                FontSize="61" 
+                FontSize="61px" 
                 FontFamily="Arial"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"

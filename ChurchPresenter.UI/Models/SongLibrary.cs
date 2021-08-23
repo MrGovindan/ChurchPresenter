@@ -14,7 +14,8 @@ namespace ChurchPresenter.UI.Models
         public SongLibrary()
         {
             currentLibrary = new List<Song>();
-            using (var connection = new SqliteConnection("Data Source=C:/Users/Jesse/AppData/Roaming/openlp/data/songs/songs.sqlite"))
+            var userDir = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\", "/");
+            using (var connection = new SqliteConnection("Data Source=" + userDir + "/openlp/data/songs/songs.sqlite"))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
