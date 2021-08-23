@@ -41,10 +41,10 @@ namespace ChurchPresenter.WebSocketServer
             clients.Add(manager);
         }
 
-        public async Task WriteString(string v)
+        public void WriteString(string v)
         {
             foreach (var client in clients)
-                await client.WriteString(v);
+                client.WriteString(v);
         }
     }
 }

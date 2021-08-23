@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ChurchPresenter.UI": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}

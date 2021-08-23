@@ -1,0 +1,75 @@
+﻿<Grid x:Class="ChurchPresenter.UI.WpfViews.ProjectionView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d" 
+      d:DesignHeight="650" d:DesignWidth="400">
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock Grid.Row="0" Name="Heading" Text="Preview" FontSize="26" FontWeight="Bold"  HorizontalAlignment="Center"/>
+    <TextBlock Grid.Row="1" Name="SongTitle" HorizontalAlignment="Center"/>
+
+    <ListBox Name="SlideList" Grid.Row="2" Margin="5">
+    </ListBox>
+    <Viewbox Grid.Row="3" Margin="5" Stretch="Uniform" StretchDirection="Both">
+        <Border BorderBrush="Black" BorderThickness="1">
+        <Grid Name ="PreviewGrid" Background="White" Width="1920" Height="1080">
+            <TextBlock 
+                Text="" 
+                FontSize="61" 
+                FontFamily="Arial"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="2" Color="White" Direction="0" ShadowDepth="2"></DropShadowEffect>
+                    </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock 
+                Text="" 
+                FontSize="61" 
+                FontFamily="Arial"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="2" Color="White" Direction="180" ShadowDepth="2"></DropShadowEffect>
+                    </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock 
+                Text="" 
+                FontSize="61" 
+                FontFamily="Arial"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="2" Color="White" Direction="90" ShadowDepth="2"></DropShadowEffect>
+                    </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock 
+                Text="" 
+                FontSize="61" 
+                FontFamily="Arial"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="2" Color="White" Direction="-90" ShadowDepth="2"></DropShadowEffect>
+                    </TextBlock.Effect>
+            </TextBlock>
+        </Grid>
+        </Border>
+    </Viewbox>
+
+</Grid>

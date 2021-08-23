@@ -9,14 +9,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
     public class WebSocketStreamManagerTests
     {
         [Test]
-        public async Task whenWritingAString_messageContainsFinBit()
+        public void whenWritingAString_messageContainsFinBit()
         {
             // Arrange
             var fixture = CreateFixture();
             var sut = fixture.sut;
 
             // Act
-            await sut.WriteString("test");
+            sut.WriteString("test");
 
             // Assert
             var memory = fixture.memStream.ToArray();
@@ -31,14 +31,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
         }
 
         [Test]
-        public async Task whenWritingAString_RsvBitsAreLeftAs0()
+        public void whenWritingAString_RsvBitsAreLeftAs0()
         {
             // Arrange
             var fixture = CreateFixture();
             var sut = fixture.sut;
 
             // Act
-            await sut.WriteString("test");
+            sut.WriteString("test");
 
 
             // Assert
@@ -58,14 +58,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
         }
 
         [Test]
-        public async Task whenWritingAString_FrameOpCodeIsSetToStringAsync()
+        public void whenWritingAString_FrameOpCodeIsSetToStringAsync()
         {
             // Arrange
             var fixture = CreateFixture();
             var sut = fixture.sut;
 
             // Act
-            await sut.WriteString("test");
+            sut.WriteString("test");
 
             // Assert
             var memory = fixture.memStream.ToArray();
@@ -79,14 +79,14 @@ namespace ChurchPresenter.WebSocketServer.Tests
         }
 
         [Test]
-        public async Task whenWritingAString_MaskBitIsNotSet()
+        public void whenWritingAString_MaskBitIsNotSet()
         {
             // Arrange
             var fixture = CreateFixture();
             var sut = fixture.sut;
 
             // Act
-            await sut.WriteString("test");
+            sut.WriteString("test");
 
             // Assert
             var memory = fixture.memStream.ToArray();
@@ -103,7 +103,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
         [TestCase(64)]
         [TestCase(125)]
         [Test]
-        public async Task whenWritingAShortString_PayloadLengthIsMessageLength(int messageLength)
+        public void whenWritingAShortString_PayloadLengthIsMessageLength(int messageLength)
         {
             // Arrange
             var fixture = CreateFixture();
@@ -111,7 +111,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
             var message = CreateStringOfLength(messageLength);
 
             // Act
-            await sut.WriteString(message);
+            sut.WriteString(message);
 
             // Assert
             var memory = fixture.memStream.ToArray();
@@ -123,7 +123,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
         [TestCase(10000)]
         [TestCase(65535)]
         [Test]
-        public async Task whenWritingAMediumString_PayloadLengthIs126AndExtendedPayloadContainsMessageLength(int messageLength)
+        public void whenWritingAMediumString_PayloadLengthIs126AndExtendedPayloadContainsMessageLength(int messageLength)
         {
             // Arrange
             var fixture = CreateFixture();
@@ -131,7 +131,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
             var message = CreateStringOfLength(messageLength);
 
             // Act
-            await sut.WriteString(message);
+            sut.WriteString(message);
 
             // Assert
             var memory = fixture.memStream.ToArray();
@@ -149,7 +149,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
         [TestCase(66000)]
         [TestCase(80000)]
         [Test]
-        public async Task whenWritingALongString_PayloadLengthIs127AndExtendedPayloadContainsMessageLength(int messageLength)
+        public void whenWritingALongString_PayloadLengthIs127AndExtendedPayloadContainsMessageLength(int messageLength)
         {
             // Arrange
             var fixture = CreateFixture();
@@ -157,7 +157,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
             var message = CreateStringOfLength(messageLength);
 
             // Act
-            await sut.WriteString(message);
+            sut.WriteString(message);
 
             // Assert
             var memory = fixture.memStream.ToArray();
@@ -172,7 +172,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
         }
 
         [Test]
-        public async Task whenAStringWithNonAsciiCharacters_PayloadContainsUt8EncodedText()
+        public void whenAStringWithNonAsciiCharacters_PayloadContainsUt8EncodedText()
         {
             // Arrange
             var fixture = CreateFixture();
@@ -181,7 +181,7 @@ namespace ChurchPresenter.WebSocketServer.Tests
             var expectedMessageLength = 11;
 
             // Act
-            await sut.WriteString(message);
+            sut.WriteString(message);
 
             // Assert
             var memory = fixture.memStream.ToArray();

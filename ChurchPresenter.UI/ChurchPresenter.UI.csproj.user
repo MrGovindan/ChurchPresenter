@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="WpfViews\BibleLibraryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WpfViews\LibraryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WpfViews\ProjectionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WpfViews\ServiceView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WpfViews\SongEntry.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WpfViews\SongLibraryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\BibleLibraryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\LibraryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\ProjectionView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\ServiceView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\SongEntry.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WpfViews\SongLibraryView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>
