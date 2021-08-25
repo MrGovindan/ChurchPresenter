@@ -17,27 +17,27 @@ namespace ChurchPresenter.UI.Presenters
     class SlideControlButtonsPresenter
     {
         private readonly ISlideControlButtonsView view;
-        protected Song selectedSong = new SongBuilder().Build();
+        protected IFolder selectedSong = new LyricFolderBuilder().Build();
         int currentSlideIndex = 0;
 
         public SlideControlButtonsPresenter(
             ISlideControlButtonsView view,
-            ISelectedSongPublisher selectedSongPublisher,
-            ISelectedSlidePublisher selectedSlidePublisher)
+            ISelectedFolderModel selectedSongPublisher,
+            ISelectedSliderPublisher selectedSlidePublisher)
         {
             this.view = view;
 
             view.SetPreviousSlideButtonEnabled(false);
             view.SetNextSlideButtonEnabled(false);
 
-            view.GoToNextSlide += () => selectedSlidePublisher.PublishSelectedSlide(selectedSong.slides[++currentSlideIndex]);
-            view.GoToPreviousSlide += () => selectedSlidePublisher.PublishSelectedSlide(selectedSong.slides[--currentSlideIndex]);
+            view.GoToNextSlide += () => selectedSlidePublisher.PublishSelectedSlide(selectedSong.GetSlides()[++currentSlideIndex]);
+            view.GoToPreviousSlide += () => selectedSlidePublisher.PublishSelectedSlide(selectedSong.GetSlides()[--currentSlideIndex]);
 
-            selectedSongPublisher.SelectedSongChanged += HandleSongChanged;
+            selectedSongPublisher.SelectedFolderChanged += HandleSongChanged;
             selectedSlidePublisher.SelectedSlideChanged += HandleSlideChanged;
         }
 
-        private void HandleSongChanged(Song selectedSong)
+        private void HandleSongChanged(IFolder selectedSong)
         {
             this.selectedSong = selectedSong;
         }
@@ -46,12 +46,12 @@ namespace ChurchPresenter.UI.Presenters
         {
             currentSlideIndex = GetIndexOfSlideInSong(selectedSlide);
             view.SetPreviousSlideButtonEnabled(currentSlideIndex != 0);
-            view.SetNextSlideButtonEnabled(currentSlideIndex != selectedSong.slides.Length - 1);
+            view.SetNextSlideButtonEnabled(currentSlideIndex != selectedSong.GetSlides().Length - 1);
         }
 
         private int GetIndexOfSlideInSong(Slide selectedSlide)
         {
-            return new List<Slide>(selectedSong.slides).IndexOf(selectedSlide);
+            return new List<Slide>(selectedSong.GetSlides()).IndexOf(selectedSlide);
         }
     }
     public interface ILiveSlideControlButtonsView : ISlideControlButtonsView
@@ -65,38 +65,19 @@ namespace ChurchPresenter.UI.Presenters
 
     class LiveSlideControlButtonsPresenter : SlideControlButtonsPresenter
     {
-        private readonly IPreviewSlideControlButtonsView view;
-        private bool firstSongSelected = false;
-
         public LiveSlideControlButtonsPresenter(
             ILiveSlideControlButtonsView view,
-            [KeyFilter("Live")] ISelectedSongPublisher selectedSongPublisher,
-            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher,
-            ISlideVisibilityPublisher visibilityPublisher) : base(view, selectedSongPublisher, selectedSlidePublisher)
+            [KeyFilter("Live")] ISelectedFolderModel selectedSongPublisher,
+            [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
+            ISlideVisibilityModel visibilityModel) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
-            view.SetHideSlideButtonEnabled(false);
-            view.SetShowSlideButtonEnabled(false);
-
-            view.SlideHidden += () =>
+            visibilityModel.SlideVisibilityChanged += visible =>
             {
-                visibilityPublisher.PublishSlideVisibility(false);
-                view.SetHideSlideButtonEnabled(false);
-                view.SetShowSlideButtonEnabled(true);
+                view.SetHideSlideButtonEnabled(visible);
+                view.SetShowSlideButtonEnabled(!visible);
             };
-            view.SlideShown += () =>
-            {
-                visibilityPublisher.PublishSlideVisibility(true);
-                view.SetShowSlideButtonEnabled(false);
-                view.SetHideSlideButtonEnabled(true);
-            };
-            selectedSongPublisher.SelectedSongChanged += song =>
-            {
-                if (!firstSongSelected)
-                {
-                    firstSongSelected = true;
-                    view.SetHideSlideButtonEnabled(true);
-                }
-            };
+            view.SlideShown += () => visibilityModel.SetSlideVisible(true);
+            view.SlideHidden += () => visibilityModel.SetSlideVisible(false);
         }
     }
 
@@ -110,13 +91,13 @@ namespace ChurchPresenter.UI.Presenters
     {
         public PreviewSlideControlButtonsPresenter(
             IPreviewSlideControlButtonsView view,
-            [KeyFilter("Preview")] ISelectedSongPublisher selectedSongPublisher,
-            [KeyFilter("Preview")] ISelectedSlidePublisher selectedSlidePublisher,
+            [KeyFilter("Preview")] ISelectedFolderModel selectedSongPublisher,
+            [KeyFilter("Preview")] ISelectedSliderPublisher selectedSlidePublisher,
             IServiceModel serviceModel,
-            [KeyFilter("Live")] ISelectedSongPublisher liveSongSelectionPublisher) : base(view, selectedSongPublisher, selectedSlidePublisher)
+            [KeyFilter("Live")] ISelectedFolderModel liveSongSelectionPublisher) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
-            view.SongAddedToService += () => serviceModel.AddSongToService(selectedSong);
-            view.SongShownOnLive += () => liveSongSelectionPublisher.PublishSelectedSong(selectedSong);
+            view.SongAddedToService += () => serviceModel.AddFolder(selectedSong);
+            view.SongShownOnLive += () => liveSongSelectionPublisher.PublishSelectedFolder(selectedSong);
         }
     }
 }

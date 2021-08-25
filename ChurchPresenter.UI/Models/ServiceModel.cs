@@ -6,19 +6,24 @@ namespace ChurchPresenter.UI.Models
 {
     class ServiceModel : IServiceModel
     {
-        public event Action<Song> SongAdded;
+        public event Action<IFolder> ItemAdded;
 
-        private List<Song> currentService = new List<Song>();
+        private List<IFolder> currentService = new List<IFolder>();
 
-        public void AddSongToService(Song song)
-        {
-            currentService.Add(song);
-            SongAdded?.Invoke(song);
-        }
-
-        public Song ItemAt(int index)
+        public IFolder ItemAt(int index)
         {
             return currentService[index];
+        }
+
+        public void RemoveSongAt(int index)
+        {
+            currentService.RemoveAt(index);
+        }
+
+        public void AddFolder(IFolder folder)
+        {
+            currentService.Add(folder);
+            ItemAdded?.Invoke(folder);
         }
     }
 }

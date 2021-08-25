@@ -7,8 +7,6 @@ namespace ChurchPresenter.UI
 {
     class App : Application
     {
-        private WebSocketServer.WebSocketServer server;
-
         [STAThread]
         public static void Main(string[] args)
         {

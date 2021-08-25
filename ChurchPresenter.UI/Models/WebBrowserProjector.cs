@@ -13,14 +13,14 @@ namespace ChurchPresenter.UI.Models
         string currentSlide = "";
 
         public WebBrowserProjector(
-            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher,
-            ISlideVisibilityPublisher slideVisibilityPublisher)
+            [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
+            ISlideVisibilityModel slideVisibilityPublisher)
         {
             server = new WebSocketServer.WebSocketServer(new IPEndPoint(IPAddress.Loopback, 5000));
 
             selectedSlidePublisher.SelectedSlideChanged += slide =>
             {
-                currentSlide = slide.text.Replace("\n", "<br>");
+                currentSlide = slide.ToHtml();
                 Show();
             };
             slideVisibilityPublisher.SlideVisibilityChanged += visible =>

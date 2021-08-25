@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    public interface ISelectedSlidePublisher
+    public interface ISelectedSliderPublisher
     {
         event Action<Slide> SelectedSlideChanged;
         void PublishSelectedSlide(Slide slide);

@@ -26,8 +26,8 @@ namespace ChurchPresenter.UI.WpfViews
         public LibraryView()
         {
             InitializeComponent();
-            SongsButton.Click += (o, e) => SongsSelected?.Invoke();
-            BiblesButton.Click += (o, e) => BiblesSelected?.Invoke();
+            SongsButton.MouseLeftButtonUp += (o, e) => SongsSelected?.Invoke();
+            BiblesButton.MouseLeftButtonUp += (o, e) => BiblesSelected?.Invoke();
             Loaded += (o, e) => OnLoaded?.Invoke();
         }
 
@@ -43,39 +43,41 @@ namespace ChurchPresenter.UI.WpfViews
             switch (contentType)
             {
                 case LibraryContent.Songs:
-                    ArrangeForSongContent();
+                    SongsButton.Content = content;
+                    //ArrangeForSongContent();
                     break;
                 case LibraryContent.Bibles:
+                    BiblesButton.Content = content;
                     ArrangeForBibleContent();
                     break;
             }
 
-            CategoryContent.Children.Clear();
-            CategoryContent.Children.Add(content);
+            //Contents.Children.Clear();
+            //Contents.Children.Add(content);
         }
 
         private void ArrangeForSongContent()
         {
-            Categories.RowDefinitions.Clear();
-            Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
-            Categories.RowDefinitions.Add(CreateRowDefinition(STAR));
-            Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
+            //Categories.RowDefinitions.Clear();
+            //Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
+            //Categories.RowDefinitions.Add(CreateRowDefinition(STAR));
+            //Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
 
-            Grid.SetRow(SongsButton, 0);
-            Grid.SetRow(CategoryContent, 1);
-            Grid.SetRow(BiblesButton, 2);
+            //Grid.SetRow(SongsButton, 0);
+            //Grid.SetRow(CategoryContent, 1);
+            //Grid.SetRow(BiblesButton, 2);
         }
 
         private void ArrangeForBibleContent()
         {
-            Categories.RowDefinitions.Clear();
-            Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
-            Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
-            Categories.RowDefinitions.Add(CreateRowDefinition(STAR));
+            //Categories.RowDefinitions.Clear();
+            //Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
+            //Categories.RowDefinitions.Add(CreateRowDefinition(AUTO));
+            //Categories.RowDefinitions.Add(CreateRowDefinition(STAR));
 
-            Grid.SetRow(SongsButton, 0);
-            Grid.SetRow(BiblesButton, 1);
-            Grid.SetRow(CategoryContent, 2);
+            //Grid.SetRow(SongsButton, 0);
+            //Grid.SetRow(BiblesButton, 1);
+            //Grid.SetRow(CategoryContent, 2);
         }
     }
 }

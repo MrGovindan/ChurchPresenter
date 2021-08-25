@@ -1,4 +1,5 @@
-﻿using ChurchPresenter.UI.Presenters;
+﻿using ChurchPresenter.UI.Models;
+using ChurchPresenter.UI.Presenters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,20 +25,20 @@ namespace ChurchPresenter.UI.WpfViews
             InitializeComponent();
         }
 
-        public void AddSongTitle(string name)
-        {
-            var entry = new SongEntry(name, "Remove from service");
-            ServiceList.Items.Add(entry);
-            var index = ServiceList.Items.Count - 1;
-            entry.MouseDoubleClick += (o, e) => SongSelected?.Invoke(GetEntryIndex(entry));
-            entry.ContextMenuItem.Click += (o, e) => SongRemoved?.Invoke(GetEntryIndex(entry));
-        }
-
-        private int GetEntryIndex(SongEntry entry) => ServiceList.Items.IndexOf(entry);
+        private int GetEntryIndex(ListItem entry) => ServiceList.Items.IndexOf(entry);
 
         public void RemoveSongTitle(int index)
         {
             ServiceList.Items.RemoveAt(index);
+        }
+
+        public void AddFolder(IFolder folder)
+        {
+            var entry = new ListItem(folder, "Remove from service");
+            ServiceList.Items.Add(entry);
+            var index = ServiceList.Items.Count - 1;
+            entry.MouseDoubleClick += (o, e) => SongSelected?.Invoke(GetEntryIndex(entry));
+            entry.ContextMenuItem.Click += (o, e) => SongRemoved?.Invoke(GetEntryIndex(entry));
         }
     }
 }

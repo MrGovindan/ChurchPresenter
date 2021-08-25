@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    class SelectedSlidePublisher : ISelectedSlidePublisher
+    class SelectedSlidePublisher : ISelectedSliderPublisher
     {
         public event Action<Slide> SelectedSlideChanged;
 

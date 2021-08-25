@@ -6,7 +6,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Tests
 {
-    class SongTests
+    class LyricFolderTests
     {
         private static string testLyrics = @"<?xml version='1.0' encoding='UTF-8'?>
 <song version='1.0'>
@@ -34,21 +34,31 @@ Let me be singing when the evening comes]]>
         public void WhenCreatedWithXmlLyrics_AllSlidesAreGenerated()
         {
             // Act
-            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
+            var testLyricFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Assert
-            Assert.That(testSong.slides.Length, Is.EqualTo(4));
+            Assert.That(testLyricFolder.GetSlides().Length, Is.EqualTo(4));
         }
 
         [Test]
         public void WhenCreatedWithXmlLyrics_SlidesContainCorrectData()
         {
             // Act
-            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
+            var testLyricFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Assert
-            Assert.That(testSong.slides[0].text,
+            Assert.That(testLyricFolder.GetSlides()[0].ToString(),
                 Is.EqualTo("Bless the Lord, Oh my soul, O my soul\r\nWorship His Holy Name"));
+        }
+
+        [Test]
+        public void ReturnsASongFolderType()
+        {
+            // Act
+            var testLyricFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
+
+            // Assert
+            Assert.That(testLyricFolder.GetFolderType(), Is.EqualTo(FolderType.Lyric));
         }
     }
 }

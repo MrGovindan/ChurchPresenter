@@ -159,7 +159,7 @@ namespace ChurchPresenter.UI.Tests
             var songLibrary = Substitute.For<ISongLibrary>();
             songLibrary.GetAllSongs().Returns(songList);
             var view = Substitute.For<ISongLibraryView>();
-            var publisher = Substitute.For<ISelectedSongPublisher>();
+            var publisher = Substitute.For<ISelectedFolderModel>();
             var presenter = CreateSut(view, songLibrary, publisher);
 
             // Act
@@ -167,7 +167,7 @@ namespace ChurchPresenter.UI.Tests
             view.SelectedSongChanged += Raise.Event<Action<int>>(1);
 
             // Assert
-            publisher.Received().PublishSelectedSong(songList[1]);
+            publisher.Received().PublishSelectedFolder(songList[1]);
         }
         
         [Test]
@@ -186,29 +186,29 @@ namespace ChurchPresenter.UI.Tests
             view.SongAddedToService += Raise.Event<Action<int>>(2);
 
             // Assert
-            serviceModel.Received().AddSongToService(songList[2]);
+            serviceModel.Received().AddFolder(songList[2]);
         }
 
 
         private static SongLibraryPresenter CreateSut(
             ISongLibraryView view,
             ISongLibrary songLibrary,
-            ISelectedSongPublisher selectedSongPublisher = null,
+            ISelectedFolderModel selectedSongPublisher = null,
             IServiceModel serviceModel = null)
         {
             if (selectedSongPublisher == null)
-                selectedSongPublisher = Substitute.For<ISelectedSongPublisher>();
+                selectedSongPublisher = Substitute.For<ISelectedFolderModel>();
             if (serviceModel == null)
                 serviceModel = Substitute.For<IServiceModel>();
 
             return new SongLibraryPresenter(view, songLibrary, selectedSongPublisher, serviceModel);
         }
 
-        private static IList<Song> CreateSongListFromTitles(params string[] titles)
+        private static IList<LyricFolder> CreateSongListFromTitles(params string[] titles)
         {
-            var songs = new List<Song>();
+            var songs = new List<LyricFolder>();
             foreach (var title in titles)
-                songs.Add(new SongBuilder().WithTitle(title).Build());
+                songs.Add(new LyricFolderBuilder().WithTitle(title).Build());
             return songs;
         }
     }

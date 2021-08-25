@@ -4,10 +4,10 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    public interface ISlideVisibilityPublisher
+    public interface ISlideVisibilityModel
     {
         event Action<bool> SlideVisibilityChanged;
-
-        void PublishSlideVisibility(bool visible);
+        void SetSlideVisible(bool visible);
+        bool IsSlideVisible();
     }
 }

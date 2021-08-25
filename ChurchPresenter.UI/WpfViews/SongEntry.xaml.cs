@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ChurchPresenter.UI.Models;
+using MahApps.Metro.IconPacks;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -13,12 +15,20 @@ using System.Windows.Shapes;
 
 namespace ChurchPresenter.UI.WpfViews
 {
-    public partial class SongEntry : ListBoxItem
+    public partial class ListItem : ListBoxItem
     {
-        public SongEntry(string songTitle, string contextMenuItemText)
+        public ListItem(string songTitle, string contextMenuItemText)
         {
             InitializeComponent();
             SongTitle.Text = songTitle;
+            ContextMenuItem.Header = contextMenuItemText;
+        }
+
+        public ListItem(IFolder folder, string contextMenuItemText)
+        {
+            InitializeComponent();
+            Icon.Kind = folder.GetFolderType() == FolderType.Lyric ? PackIconMaterialKind.Music : PackIconMaterialKind.Book;
+            SongTitle.Text = folder.GetTitle();
             ContextMenuItem.Header = contextMenuItemText;
         }
     }

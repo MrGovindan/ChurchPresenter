@@ -30,11 +30,11 @@ namespace ChurchPresenter.UI.WpfViews
         {
             InitializeComponent();
 
-            previousSlideButton = CreateNewButton(PackIconMaterialKind.ChevronLeft, "Go to previous slide", () => GoToPreviousSlide?.Invoke());
-            nextSlideButton = CreateNewButton(PackIconMaterialKind.ChevronRight, "Go to next slide", () => GoToNextSlide?.Invoke());
+            previousSlideButton = CreateNewIconButton(PackIconMaterialKind.ChevronLeft, "Go to previous slide", () => GoToPreviousSlide?.Invoke());
+            nextSlideButton = CreateNewIconButton(PackIconMaterialKind.ChevronRight, "Go to next slide", () => GoToNextSlide?.Invoke());
         }
 
-        protected Button CreateNewButton(PackIconMaterialKind iconKind, string tooltipText, Action action)
+        protected Button CreateNewIconButton(PackIconMaterialKind iconKind, string tooltipText, Action action)
         {
             var button = new Button();
             button.Margin = new Thickness(4);
@@ -47,6 +47,24 @@ namespace ChurchPresenter.UI.WpfViews
             var icon = new PackIconMaterial();
             icon.Kind = iconKind;
             button.Content = icon;
+            Children.Add(button);
+            button.Click += (o, e) => action.Invoke();
+
+            return button;
+        }
+        protected Button CreateNewTextButton(string text, string tooltipText, Action action)
+        {
+            var button = new Button();
+            button.Margin = new Thickness(4);
+            var tooltip = new ToolTip();
+            var tooltipTextBlock = new TextBlock();
+            tooltipTextBlock.Text = tooltipText;
+            tooltip.Content = tooltipTextBlock;
+            button.ToolTip = tooltip;
+
+            var textBlock = new TextBlock();
+            textBlock.Text = text;
+            button.Content = textBlock;
             Children.Add(button);
             button.Click += (o, e) => action.Invoke();
 
@@ -97,8 +115,8 @@ namespace ChurchPresenter.UI.WpfViews
 
         public LiveSlideControlButtonsView() : base()
         {
-            slideShownButton = CreateNewButton(PackIconMaterialKind.Eye, "Show slide", () => SlideShown?.Invoke());
-            slideHiddenButton = CreateNewButton(PackIconMaterialKind.EyeOff, "Hide slide", () => SlideHidden?.Invoke());
+            slideShownButton = CreateNewTextButton("Show", "Show slide", () => SlideShown?.Invoke());
+            slideHiddenButton = CreateNewTextButton("Hide", "Hide slide", () => SlideHidden?.Invoke());
 
             SetUpLayout();
         }
@@ -124,8 +142,8 @@ namespace ChurchPresenter.UI.WpfViews
 
         public PreviewSlideControlButtonsView() : base()
         {
-            showSongOnLiveButton = CreateNewButton(PackIconMaterialKind.ProjectorScreen, "Show song on Live", () => SongShownOnLive?.Invoke());
-            addSongToServiceButton = CreateNewButton(PackIconMaterialKind.PlaylistPlus, "Add song to service", () => SongAddedToService?.Invoke());
+            showSongOnLiveButton = CreateNewIconButton(PackIconMaterialKind.ProjectorScreen, "Show song on Live", () => SongShownOnLive?.Invoke());
+            addSongToServiceButton = CreateNewIconButton(PackIconMaterialKind.PlaylistPlus, "Add song to service", () => SongAddedToService?.Invoke());
 
             SetUpLayout();
         }

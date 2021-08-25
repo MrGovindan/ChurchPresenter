@@ -15,6 +15,7 @@ namespace ChurchPresenter.UI
         {
             builder.RegisterType<LibraryPresenter<Panel>>().SingleInstance().AutoActivate();
             builder.RegisterType<SongLibraryPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
+            builder.RegisterType<BibleLibraryPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<LivePanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<PreviewPanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<ServicePanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();

@@ -5,30 +5,24 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ChurchPresenter.UI.WpfViews"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800">
+      Margin="4"
+      Background="White"
+      d:DesignHeight="550" d:DesignWidth="300">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Name="ButtonPanel" Height="30"></Grid>
+    <Grid Grid.Row="0" Name="SearchPanel" Margin="8, 4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="1" Name="SearchPanel" Margin="10 0 10 4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" Text="Search" Padding="0 0 4 0"/>
-            <TextBox Grid.Column="1" Text="" Name="SearchBox"/>
-        </Grid>
-
-        <Grid Grid.Row="2">
-                <ListBox Name="SongList" Background="White">
-                </ListBox>
-        </Grid>
+        <TextBlock Grid.Column="0" Text="Find:" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="4, 0"/>
+        <TextBox Grid.Column="1" Text="" Name="SearchBox" VerticalAlignment="Center"/>
     </Grid>
+
+    <ListBox Grid.Row="1" Name="SongList" />
 </Grid>

@@ -12,7 +12,7 @@ namespace ChurchPresenter.UI.Presenters
 
         void SetTitle(string title);
         void SetSlides(Slide[] slides);
-        void SetPreviewText(string text);
+        void SetPreviewText(Slide slide);
         void SelectSlide(int index);
         void SetPreviewTextVisible(bool visible);
     }
@@ -21,10 +21,10 @@ namespace ChurchPresenter.UI.Presenters
     {
         public LivePanelPresenter(
             [KeyFilter("Live")] IProjectionView view,
-            [KeyFilter("Live")] ISelectedSongPublisher selectedSongPublisher,
-            [KeyFilter("Live")] ISelectedSlidePublisher selectedSlidePublisher,
-            ISlideVisibilityPublisher slideVisibilityPublisher)
-            : base(view, selectedSongPublisher, selectedSlidePublisher)
+            [KeyFilter("Live")] ISelectedFolderModel selectedFolderModel,
+            [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
+            ISlideVisibilityModel slideVisibilityPublisher)
+            : base(view, selectedFolderModel, selectedSlidePublisher)
         {
             slideVisibilityPublisher.SlideVisibilityChanged += view.SetPreviewTextVisible;
         }
@@ -34,9 +34,9 @@ namespace ChurchPresenter.UI.Presenters
     {
         public PreviewPanelPresenter(
             [KeyFilter("Preview")] IProjectionView view,
-            [KeyFilter("Preview")] ISelectedSongPublisher selectedSongPublisher,
-            [KeyFilter("Preview")] ISelectedSlidePublisher selectedSlidePublisher)
-            : base(view, selectedSongPublisher, selectedSlidePublisher)
+            [KeyFilter("Preview")] ISelectedFolderModel selectedFolderModel,
+            [KeyFilter("Preview")] ISelectedSliderPublisher selectedSlidePublisher)
+            : base(view, selectedFolderModel, selectedSlidePublisher)
         {
         }
     }
@@ -44,36 +44,37 @@ namespace ChurchPresenter.UI.Presenters
     class ProjectionPanelPresenter
     {
         private IProjectionView view;
-        protected Song currentSong;
-        private ISelectedSlidePublisher selectedSlidePublisher;
+        protected IFolder currentFolder;
+        private ISelectedSliderPublisher selectedSlidePublisher;
 
         public ProjectionPanelPresenter(
             IProjectionView view,
-            ISelectedSongPublisher selectedSongPublisher,
-            ISelectedSlidePublisher selectedSlidePublisher)
+            ISelectedFolderModel selectedFolderModel,
+            ISelectedSliderPublisher selectedSlidePublisher)
         {
             this.view = view;
             this.selectedSlidePublisher = selectedSlidePublisher;
 
-            selectedSongPublisher.SelectedSongChanged += HandleSongSelected;
-            view.SlideSelected += index => selectedSlidePublisher.PublishSelectedSlide(currentSong.slides[index]);
+            selectedFolderModel.SelectedFolderChanged += HandleFolderSelected;
+            view.SlideSelected += index => selectedSlidePublisher.PublishSelectedSlide(currentFolder.GetSlides()[index]);
             selectedSlidePublisher.SelectedSlideChanged += HandleSlideSeleted;
         }
 
 
-        private void HandleSongSelected(Song song)
+        private void HandleFolderSelected(IFolder folder)
         {
-            currentSong = song;
-            view.SetTitle(song.title);
-            view.SetSlides(song.slides);
-            selectedSlidePublisher.PublishSelectedSlide(song.slides[0]);
+            currentFolder = folder;
+            view.SetTitle(folder.GetTitle());
+            view.SetSlides(folder.GetSlides());
+            selectedSlidePublisher.PublishSelectedSlide(folder.GetSlides()[0]);
         }
+
         private void HandleSlideSeleted(Slide selectedSlide)
         {
             view.SelectSlide(GetIndexOfSlide(selectedSlide));
-            view.SetPreviewText(selectedSlide.text);
+            view.SetPreviewText(selectedSlide);
         }
 
-        private int GetIndexOfSlide(Slide selectedSlide) => new List<Slide>(currentSong.slides).IndexOf(selectedSlide);
+        private int GetIndexOfSlide(Slide selectedSlide) => new List<Slide>(currentFolder.GetSlides()).IndexOf(selectedSlide);
     }
 }

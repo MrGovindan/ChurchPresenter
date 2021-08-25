@@ -5,10 +5,36 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ChurchPresenter.UI.WpfViews"
       mc:Ignorable="d" 
-      Background="Red"
-      d:DesignHeight="450" d:DesignWidth="800">
+      Background="White"
+      Margin="4"
+      d:DesignHeight="550" d:DesignWidth="300">
 
-    <Grid>
-        
+    <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Grid Grid.Row="0" Margin="8, 4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="4"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Find:" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="4, 0"/>
+        <ComboBox Grid.Row="0" Grid.Column="1" Name="SearchBox" Grid.ColumnSpan="2" VerticalAlignment="Center" IsEditable="True"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Version:" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="4, 0"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Name="VersionsList" VerticalAlignment="Center"/>
+        <Button Grid.Row="4" Grid.Column="2" Name="SearchButton" Content="Search"/>
     </Grid>
+
+    <ListBox Grid.Row="1" Name="ScriptureList"/>
 </Grid>

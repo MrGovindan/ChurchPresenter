@@ -10,7 +10,7 @@ namespace ChurchPresenter.UI.Presenters
     {
         event Action<int> SongSelected;
         event Action<int> SongRemoved;
-        void AddSongTitle(string name);
+        void AddFolder(IFolder folder);
         void RemoveSongTitle(int index);
     }
 
@@ -22,14 +22,20 @@ namespace ChurchPresenter.UI.Presenters
         public ServicePanelPresenter(
             IServicePanelView view,
             IServiceModel model,
-            [KeyFilter("Live")] ISelectedSongPublisher songSelectedPublisher)
+            [KeyFilter("Live")] ISelectedFolderModel songSelectedPublisher)
         {
             this.view = view;
             this.model = model;
 
-            model.SongAdded += song => view.AddSongTitle(song.title);
-            view.SongSelected += index => songSelectedPublisher.PublishSelectedSong(model.ItemAt(index));
-            view.SongRemoved += index => view.RemoveSongTitle(index);
+            model.ItemAdded += item => view.AddFolder(item);
+            view.SongSelected += index => songSelectedPublisher.PublishSelectedFolder(model.ItemAt(index));
+            view.SongRemoved += HandleSongRemoved;
+        }
+
+        private void HandleSongRemoved(int songIndex)
+        {
+            model.RemoveSongAt(songIndex);
+            view.RemoveSongTitle(songIndex);
         }
     }
 }

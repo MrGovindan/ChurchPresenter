@@ -12,45 +12,45 @@ namespace ChurchPresenter.UI.Tests
     {
 
         [Test]
-        public void WhenASongIsSelected_PreviewTitleIsChanged()
+        public void WhenAFolderIsSelected_PreviewTitleIsChanged()
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().WithTitle("Bombastic").WithLyrics(testLyrics).Build();
+            var testFolder = new LyricFolderBuilder().WithTitle("Bombastic").WithLyrics(testLyrics).Build();
 
             // Act
-            fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
+            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
             fixture.view.Received().SetTitle("Bombastic");
         }
 
         [Test]
-        public void WhenASongIsSelected_PreviewSlidesAreChanged()
+        public void WhenAFolderIsSelected_PreviewSlidesAreChanged()
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
+            var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Act
-            fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
+            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
             fixture.view.Received().SetSlides(Arg.Any<Slide[]>());
         }
 
         [Test]
-        public void WhenASongIsSelected_TheFirstSlideIsPublishedAsSelected()
+        public void WhenAFolderIsSelected_TheFirstSlideIsPublishedAsSelected()
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
+            var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Act
-            fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
+            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
-            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testSong.slides[0]);
+            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testFolder.GetSlides()[0]);
         }
 
         [Test]
@@ -58,15 +58,15 @@ namespace ChurchPresenter.UI.Tests
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
-            fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
+            var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
+            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Act
-            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testSong.slides[1]);
+            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testFolder.GetSlides()[1]);
 
             // Assert
             fixture.view.Received().SelectSlide(1);
-            fixture.view.Received().SetPreviewText("Foo Bar Baz");
+            fixture.view.Received().SetPreviewText(testFolder.GetSlides()[1]);
         }
 
         private static string testLyrics = @"<?xml version='1.0' encoding='UTF-8'?>
@@ -82,24 +82,24 @@ namespace ChurchPresenter.UI.Tests
 </song>";
 
         [Test]
-        public void GivenASelectedSong_WhenASlideIsSelected_SlideSelectionIsPublished()
+        public void GivenASelectedFolder_WhenASlideIsSelected_SlideSelectionIsPublished()
         {
             // Arrange
             var fixture = CreateFixture();
-            var testSong = new SongBuilder().WithLyrics(testLyrics).Build();
-            fixture.selectedSongPublisher.SelectedSongChanged += Raise.Event<Action<Song>>(testSong);
+            var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
+            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Act
             fixture.view.SlideSelected += Raise.Event<Action<int>>(1);
 
             // Assert
-            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testSong.slides[1]);
+            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testFolder.GetSlides()[1]);
         }
 
         struct PreviewPanelPresenterTestsFixture
         {
-            public ISelectedSlidePublisher selectedSlidePublisher;
-            public ISelectedSongPublisher selectedSongPublisher;
+            public ISelectedSliderPublisher selectedSlidePublisher;
+            public ISelectedFolderModel selectedFolderPublisher;
             public IProjectionView view;
             public ProjectionPanelPresenter sut;
         }
@@ -107,10 +107,10 @@ namespace ChurchPresenter.UI.Tests
         private PreviewPanelPresenterTestsFixture CreateFixture()
         {
             var fixture = new PreviewPanelPresenterTestsFixture();
-            fixture.selectedSlidePublisher = Substitute.For<ISelectedSlidePublisher>();
-            fixture.selectedSongPublisher = Substitute.For<ISelectedSongPublisher>();
+            fixture.selectedSlidePublisher = Substitute.For<ISelectedSliderPublisher>();
+            fixture.selectedFolderPublisher = Substitute.For<ISelectedFolderModel>();
             fixture.view = Substitute.For<IProjectionView>();
-            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedSongPublisher, fixture.selectedSlidePublisher);
+            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedFolderPublisher, fixture.selectedSlidePublisher);
             return fixture;
         }
     }

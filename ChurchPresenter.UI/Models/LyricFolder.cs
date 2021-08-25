@@ -8,23 +8,33 @@ namespace ChurchPresenter.UI.Models
 {
     public class Slide
     {
-        public readonly string text;
+        protected readonly string text;
 
         public Slide(string text)
         {
             this.text = text;
         }
+
+        public override string ToString()
+        {
+            return new string(text);
+        }
+
+        public virtual string ToHtml()
+        {
+            return new string(text).Replace("\r", "").Replace("\n", "<br>");
+        }
     }
 
-    public readonly struct Song
+    public class LyricFolder : IFolder
     {
-        public readonly string title;
-        public readonly string lyrics;
-        public readonly Slide[] slides;
-        public readonly string searchTitle;
-        public readonly string searchLyrics;
+        private readonly string title;
+        private readonly string lyrics;
+        private readonly Slide[] slides;
+        private readonly string searchTitle;
+        private readonly string searchLyrics;
 
-        public Song(string title, string lyrics, string searchTitle, string searchLyrics)
+        public LyricFolder(string title, string lyrics, string searchTitle, string searchLyrics)
         {
             this.title = title;
             this.lyrics = lyrics;
@@ -56,9 +66,33 @@ namespace ChurchPresenter.UI.Models
             }
             return null;
         }
+
+        public string GetTitle()
+        {
+            return title;
+        }
+
+        public Slide[] GetSlides()
+        {
+            return slides;
+        }
+
+        public string GetSearchTitle()
+        {
+            return searchTitle;
+        }
+        public string GetSearchLyrics()
+        {
+            return searchLyrics;
+        }
+
+        public FolderType GetFolderType()
+        {
+            return FolderType.Lyric;
+        }
     }
 
-    public class SongBuilder
+    public class LyricFolderBuilder
     {
         const string EMPTY_LYRICS = "<?xml version='1.0' encoding='UTF-8'?><song><lyrics></lyrics></song>";
         private string title;
@@ -66,30 +100,30 @@ namespace ChurchPresenter.UI.Models
         private string searchLyrics;
         private string searchTitle;
 
-        public SongBuilder WithTitle(string title)
+        public LyricFolderBuilder WithTitle(string title)
         {
             this.title = title;
             return this;
         }
-        public SongBuilder WithLyrics(string lyrics)
+        public LyricFolderBuilder WithLyrics(string lyrics)
         {
             this.lyrics = lyrics;
             return this;
         }
-        public SongBuilder WithSearchLyrics(string searchLyrics)
+        public LyricFolderBuilder WithSearchLyrics(string searchLyrics)
         {
             this.searchLyrics = searchLyrics;
             return this;
         }
-        public SongBuilder WithSearchTitle(string searchTitle)
+        public LyricFolderBuilder WithSearchTitle(string searchTitle)
         {
             this.searchTitle = searchTitle;
             return this;
         }
 
-        public Song Build()
+        public LyricFolder Build()
         {
-            return new Song(title, lyrics, searchTitle, searchLyrics);
+            return new LyricFolder(title, lyrics, searchTitle, searchLyrics);
         }
     }
 }

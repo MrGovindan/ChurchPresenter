@@ -27,7 +27,7 @@ namespace ChurchPresenter.UI.WpfViews
             var index = 0;
             foreach (var song in songs)
             {
-                var entry = new SongEntry(song, "Add to service");
+                var entry = new ListItem(song, "Add to service");
                 var currentIndex = index;
                 entry.MouseDoubleClick += (o, e) => SelectedSongChanged?.Invoke(currentIndex);
                 entry.ContextMenuItem.Click += (o, e) => SongAddedToService?.Invoke(currentIndex);

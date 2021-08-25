@@ -15,13 +15,13 @@ namespace ChurchPresenter.UI.Tests
         {
             // Arrange
             var fixture = CreateTestFixture();
-            var testSong = new SongBuilder().WithTitle("TestTitle").Build();
+            var testSong = new LyricFolderBuilder().WithTitle("TestTitle").Build();
 
             // Act
-            fixture.model.AddSongToService(testSong);
+            fixture.model.AddFolder(testSong);
 
             // Assert
-            fixture.view.Received().AddSongTitle("TestTitle");
+            fixture.view.Received().AddFolder(testSong);
         }
 
         [Test]
@@ -29,16 +29,16 @@ namespace ChurchPresenter.UI.Tests
         {
             // Arrange
             var fixture = CreateTestFixture();
-            var testSong1 = new SongBuilder().WithTitle("TestTitle1").Build();
-            var testSong2 = new SongBuilder().WithTitle("TestTitle2").Build();
-            fixture.model.AddSongToService(testSong1);
-            fixture.model.AddSongToService(testSong2);
+            var testSong1 = new LyricFolderBuilder().WithTitle("TestTitle1").Build();
+            var testSong2 = new LyricFolderBuilder().WithTitle("TestTitle2").Build();
+            fixture.model.AddFolder(testSong1);
+            fixture.model.AddFolder(testSong2);
 
             // Act
             fixture.view.SongSelected += Raise.Event<Action<int>>(1);
 
             // Assert
-            fixture.songSelectedPublisher.Received().PublishSelectedSong(testSong2);
+            fixture.songSelectedPublisher.Received().PublishSelectedFolder(testSong2);
         }
 
         [Test]
@@ -46,10 +46,10 @@ namespace ChurchPresenter.UI.Tests
         {
             // Arrange
             var fixture = CreateTestFixture();
-            var testSong1 = new SongBuilder().WithTitle("TestTitle1").Build();
-            var testSong2 = new SongBuilder().WithTitle("TestTitle2").Build();
-            fixture.model.AddSongToService(testSong1);
-            fixture.model.AddSongToService(testSong2);
+            var testSong1 = new LyricFolderBuilder().WithTitle("TestTitle1").Build();
+            var testSong2 = new LyricFolderBuilder().WithTitle("TestTitle2").Build();
+            fixture.model.AddFolder(testSong1);
+            fixture.model.AddFolder(testSong2);
 
             // Act
             fixture.view.SongRemoved += Raise.Event<Action<int>>(0);
@@ -58,18 +58,35 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.Received().RemoveSongTitle(0);
         }
 
+        [Test]
+        public void WhenAnEntryIsRemovedFromService_ModelRemovesEntry()
+        {
+            // Arrange
+            var fixture = CreateTestFixture();
+            var testSong1 = new LyricFolderBuilder().WithTitle("TestTitle1").Build();
+            var testSong2 = new LyricFolderBuilder().WithTitle("TestTitle2").Build();
+            fixture.model.AddFolder(testSong1);
+            fixture.model.AddFolder(testSong2);
+
+            // Act
+            fixture.view.SongRemoved += Raise.Event<Action<int>>(0);
+
+            // Assert
+            Assert.That(fixture.model.ItemAt(0), Is.EqualTo(testSong2));
+        }
+
         struct ServicePanelPresenterTestFixture
         {
             public readonly ServicePanelPresenter sut;
             public readonly IServicePanelView view;
             public readonly IServiceModel model;
-            public readonly ISelectedSongPublisher songSelectedPublisher;
+            public readonly ISelectedFolderModel songSelectedPublisher;
 
             public ServicePanelPresenterTestFixture(
                 ServicePanelPresenter sut,
                 IServicePanelView view,
                 IServiceModel model,
-                ISelectedSongPublisher songSelectedPublisher)
+                ISelectedFolderModel songSelectedPublisher)
             {
                 this.sut = sut;
                 this.view = view;
@@ -82,7 +99,7 @@ namespace ChurchPresenter.UI.Tests
         {
             var model = new ServiceModel();
             var view = Substitute.For<IServicePanelView>();
-            var songSelectedPublisher = Substitute.For<ISelectedSongPublisher>();
+            var songSelectedPublisher = Substitute.For<ISelectedFolderModel>();
             var sut = new ServicePanelPresenter(view, model, songSelectedPublisher);
             return new ServicePanelPresenterTestFixture(sut, view, model, songSelectedPublisher);
         }

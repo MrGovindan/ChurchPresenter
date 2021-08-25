@@ -4,11 +4,25 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
+    public enum FolderType
+    {
+        Lyric,
+        Scripture
+    }
+
+    public interface IFolder
+    {
+        FolderType GetFolderType();
+        string GetTitle();
+        Slide[] GetSlides();
+    }
+
     public interface IServiceModel
     {
-        event Action<Song> SongAdded;
-        void AddSongToService(Song song);
+        event Action<IFolder> ItemAdded;
+        void AddFolder(IFolder folder);
 
-        Song ItemAt(int index);
+        IFolder ItemAt(int index);
+        void RemoveSongAt(int index);
     }
 }

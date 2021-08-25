@@ -9,11 +9,11 @@ namespace ChurchPresenter.UI.Models
 {
     public class SongLibrary : ISongLibrary
     {
-        List<Song> currentLibrary;
+        List<LyricFolder> currentLibrary;
         
         public SongLibrary()
         {
-            currentLibrary = new List<Song>();
+            currentLibrary = new List<LyricFolder>();
             var userDir = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\", "/");
             using (var connection = new SqliteConnection("Data Source=" + userDir + "/openlp/data/songs/songs.sqlite"))
             {
@@ -24,22 +24,24 @@ namespace ChurchPresenter.UI.Models
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
-                        currentLibrary.Add(new Song(reader.GetString(1), reader.GetString(3), reader.GetString(9), reader.GetString(10)));
+                        currentLibrary.Add(new LyricFolder(reader.GetString(1), reader.GetString(3), reader.GetString(9), reader.GetString(10)));
                 }
             }
+
+            currentLibrary.Sort((a, b) => a.GetTitle().CompareTo(b.GetTitle()));
         }
 
-        public Task<IList<Song>> GetAllSongs()
+        public Task<IList<LyricFolder>> GetAllSongs()
         {
-            IList<Song> result = currentLibrary;
+            IList<LyricFolder> result = currentLibrary;
             return Task.FromResult(result);
         }
 
-        public Task<IList<Song>> GetMatchingSongs(string pattern)
+        public Task<IList<LyricFolder>> GetMatchingSongs(string pattern)
         {
-            Predicate<Song> match = s => s.searchTitle.Contains(pattern.ToLower()) | s.searchLyrics.Contains(pattern.ToLower());
-            var result = new List<Song>(currentLibrary.FindAll(match));
-            return Task.FromResult((IList<Song>)result);
+            Predicate<LyricFolder> match = s => s.GetSearchTitle().Contains(pattern.ToLower()) | s.GetSearchLyrics().Contains(pattern.ToLower());
+            var result = new List<LyricFolder>(currentLibrary.FindAll(match));
+            return Task.FromResult((IList<LyricFolder>)result);
         }
     }
 }

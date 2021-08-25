@@ -12,11 +12,12 @@ namespace ChurchPresenter.UI
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<SongLibrary>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<SelectedSongPublisher>().Keyed<ISelectedSongPublisher>("Preview").SingleInstance();
-            builder.RegisterType<SelectedSongPublisher>().Keyed<ISelectedSongPublisher>("Live").SingleInstance();
-            builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSlidePublisher>("Preview").SingleInstance();
-            builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSlidePublisher>("Live").SingleInstance();
-            builder.RegisterType<SlideVisibilityPublisher>().As<ISlideVisibilityPublisher>().SingleInstance();
+            builder.RegisterType<BibleLibrary>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<SelectedFolderModel>().Keyed<ISelectedFolderModel>("Preview").SingleInstance();
+            builder.RegisterType<SelectedFolderModel>().Keyed<ISelectedFolderModel>("Live").SingleInstance();
+            builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSliderPublisher>("Preview").SingleInstance();
+            builder.RegisterType<SelectedSlidePublisher>().Keyed<ISelectedSliderPublisher>("Live").SingleInstance();
+            builder.RegisterType<SlideVisibilityModel>().As<ISlideVisibilityModel>().SingleInstance();
             builder.RegisterType<ServiceModel>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<WebBrowserProjector>().AsImplementedInterfaces().AutoActivate().SingleInstance().WithAttributeFiltering();
         }
