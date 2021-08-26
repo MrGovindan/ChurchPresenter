@@ -180,8 +180,32 @@ namespace ChurchPresenter.UI.Tests
             Assert.That(addedFolder.GetTitle(), Is.EqualTo("Revelation 3:1-3 KJV"));
             Assert.That(addedFolder.GetSlides().Length, Is.EqualTo(3));
             Assert.That(addedFolder.GetSlides()[0].ToString(), Is.EqualTo("3:1 Verse 1"));
+            Assert.That(addedFolder.GetSlides()[0].GetCaption(), Is.EqualTo("Revelation 3:1 KJV"));
             Assert.That(addedFolder.GetSlides()[1].ToString(), Is.EqualTo("3:2 Verse 2"));
             Assert.That(addedFolder.GetSlides()[2].ToString(), Is.EqualTo("3:3 Verse 3"));
+        }
+
+        [Test]
+        public void GivenAllItemsSelected_WhenAddedToService_FolderIsAddedToService2()
+        {
+            // Arrange
+            var fixture = CreateFixture();
+            var scriptureCollection = new TestScriptureCollectionBuilder()
+                .UsingVersion("KJV").Reading(Book.REVELATION).Chapter(3).FromVerse(10).To(14).Build();
+            fixture.model.GetWholeChapter(Arg.Any<int>(), Arg.Any<Book>(), Arg.Any<int>()).Returns(scriptureCollection);
+
+            fixture.view.SearchStarted += Raise.Event<Action<string, int>>("rev3", 0);
+            IFolder addedFolder = null;
+            fixture.serviceModel.AddFolder(Arg.Do<IFolder>(arg => addedFolder = arg));
+
+            // Act
+            fixture.view.AddedToService += Raise.Event<Action<int[]>>(new int[] { 0, 1, 2, 3, 4 });
+
+            // Assert
+            Assert.That(addedFolder.GetFolderType(), Is.EqualTo(FolderType.Scripture));
+            Assert.That(addedFolder.GetTitle(), Is.EqualTo("Revelation 3:10-14 KJV"));
+            Assert.That(addedFolder.GetSlides()[0].ToString(), Is.EqualTo("3:10 Verse 10"));
+            Assert.That(addedFolder.GetSlides()[0].GetCaption(), Is.EqualTo("Revelation 3:10 KJV"));
         }
 
         [Test]

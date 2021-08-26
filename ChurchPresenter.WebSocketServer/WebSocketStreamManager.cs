@@ -11,7 +11,29 @@ namespace ChurchPresenter.WebSocketServer
 {
     internal class WebSocketStreamManager
     {
-        private static string pageString = @"<!doctype html><style>body, html{margin: 0; padding: 0;} sup{line-height: 0; font-size: 28px; vertical-align: top;} #content-area{width: 100%; height: 100vh; background: transparent;}#text{position: absolute; padding: 0; margin: 0; width: 100%; bottom: 0; text-align: center; font-family: sans-serif; font-size: 61px; text-shadow: 2px 0 4px white, -2px 0 4px white, 0 2px 4px white, 0px -2px 4px white;}</style><div id='content-area'> <h1 id='text'></h1></div><script>var wsUri='ws://127.0.0.1:5000/'; function createWebSocket(){console.log('Creating web socket'); var websocket; websocket=new WebSocket(wsUri); websocket.onopen=function (e){}; websocket.onclose=function (e){}; websocket.onmessage=function (e){console.log('Received data'); document.querySelector('#text').innerHTML=e.data;}; websocket.onerror=function (e){websocket.close(); console.log('WebSocket error occured. Reconnection in 1 second'); setTimeout(createWebSocket, 1000); document.querySelector('#text').innerHTML='error detected';};}createWebSocket();</script>";
+        private static string pageString = @"<!doctype html><style>body, 
+html{margin: 0; padding: 0;} 
+sup{line-height: 0; font-size: 28px; vertical-align: top;} 
+#content-area{width: 100%; height: 100vh; background: transparent;}
+#caption{font-weight: normal; font-family: sans-serif; color: red; position: absolute; bottom: 0; margin: 0 0 0 10px; font-size: 32px}
+#text{position: absolute; padding: 0; margin: 0; width: 100%; bottom: 36px; text-align: center; font-family: sans-serif; font-size: 61px; text-shadow: 2px 0 4px white, -2px 0 4px white, 0 2px 4px white, 0px -2px 4px white;}
+</style>
+<div id='content-area'> 
+<h1 id='text'></h1>
+<h1 id='caption'></h1>
+</div><script>var wsUri='ws://127.0.0.1:5000/'; 
+function createWebSocket(){
+console.log('Creating web socket'); 
+var websocket;
+websocket=new WebSocket(wsUri);
+websocket.onopen=function (e){};
+websocket.onclose=function (e){};
+websocket.onmessage=function (e){
+console.log('Received data: ' + e.data);
+let jsData = JSON.parse(e.data);
+document.querySelector('#text').innerHTML=jsData['text'];
+document.querySelector('#caption').innerHTML=jsData['caption'];
+}; websocket.onerror=function (e){websocket.close(); console.log('WebSocket error occured. Reconnection in 1 second'); setTimeout(createWebSocket, 1000); document.querySelector('#text').innerHTML='error detected';};}createWebSocket();</script>";
 
         private readonly Stream stream;
         private readonly Action<WebSocketStreamManager> connectedAction;

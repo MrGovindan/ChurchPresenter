@@ -143,24 +143,24 @@ namespace ChurchPresenter.UI.Presenters
 
         private string GetVerseSeriesFromSelection(int[] currentSelection)
         {
-            var previousIndex = currentSelection[0] + 1;
-            string result = previousIndex.ToString();
+            var previousIndex = currentSelection[0];
+            string result = (previousIndex + scriptures.start.verse).ToString();
             var lastSet = previousIndex;
             for (int i = 1; i < currentSelection.Length; ++i)
             {
-                int currentIndex = currentSelection[i] + 1;
+                int currentIndex = currentSelection[i];
                 if ((previousIndex + 1) != currentIndex)
                 {
                     if (lastSet != previousIndex)
-                        result += "-" + previousIndex;
+                        result += "-" + (previousIndex + scriptures.start.verse).ToString();
 
-                    result += ", " + currentIndex;
+                    result += ", " + (currentIndex + scriptures.start.verse).ToString();
                     lastSet = currentIndex;
                 }
                 previousIndex = currentIndex;
             }
             if (previousIndex != lastSet)
-                result += "-" + previousIndex;
+                result += "-" + (previousIndex + scriptures.start.verse).ToString();
 
             return result;
         }
@@ -174,6 +174,8 @@ namespace ChurchPresenter.UI.Presenters
             {
                 this.version = version;
                 this.verse = verse;
+                this.caption = string.Format("{0} {1}:{2} {3}",
+                    BookHelper.ToString(verse.book), verse.chapter, verse.verse, version);
             }
 
             public override string ToString()

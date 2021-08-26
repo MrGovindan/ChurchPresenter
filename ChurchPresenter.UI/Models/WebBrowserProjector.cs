@@ -20,7 +20,9 @@ namespace ChurchPresenter.UI.Models
 
             selectedSlidePublisher.SelectedSlideChanged += slide =>
             {
-                currentSlide = slide.ToHtml();
+                currentSlide = string.Format("{{ \"text\": \"{0}\", \"caption\": \"{1}\" }}",
+                                             slide.ToHtml().Replace("\"", "&quot;"),
+                                             slide.GetCaption());
                 Show();
             };
             slideVisibilityPublisher.SlideVisibilityChanged += visible =>
@@ -31,7 +33,7 @@ namespace ChurchPresenter.UI.Models
         }
         private void Show()
         {
-            server.WriteString(slideVisible ? currentSlide : "");
+            server.WriteString(slideVisible ? currentSlide : "{ \"text\": \"\", \"caption\": \"\" }");
         }
     }
 }

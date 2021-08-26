@@ -11,6 +11,9 @@ namespace ChurchPresenter.UI.WpfViews
 {
     public partial class ProjectionView : Grid, IProjectionView
     {
+        Brush currentColor = new SolidColorBrush(Colors.Transparent);
+        Brush selectedColor = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+
         public event Action<int> SlideSelected;
 
         protected ProjectionView(string heading, SlideControlButtonsView slideControlButtonsView)
@@ -27,7 +30,12 @@ namespace ChurchPresenter.UI.WpfViews
             SlideList.Items.Clear();
             var slideIndex = 0;
             foreach (var slide in slides)
-                SlideList.Items.Add(CreateNewSlideItem(slide, slideIndex++));
+            {
+                var currentIndex = slideIndex;
+                //SlideList.Items.Add(new SlideView(slide, () => SlideSelected?.Invoke(currentIndex)));
+                SlideList.Items.Add(CreateNewSlideItem(slide, currentIndex));
+                slideIndex++;
+            }
         }
 
         private ListBoxItem CreateNewSlideItem(Slide slide, int index)
@@ -53,29 +61,40 @@ namespace ChurchPresenter.UI.WpfViews
 
         public void SetPreviewText(Slide slide)
         {
-            var html = slide.ToHtml();
+            var html = slide.ToHtml().Replace("<br>", "\n");
             var matches = supPattern.Match(html);
 
-            foreach (var child in PreviewGrid.Children)
+            foreach (var child in TextGrid.Children)
             {
-                if (child is TextBlock)
+                var tb = (TextBlock)child;
+                if (matches.Success)
                 {
-                    var tb = (TextBlock)child;
                     tb.Inlines.Clear();
                     var verseRun = new Run(matches.Groups[1].Value);
                     verseRun.BaselineAlignment = BaselineAlignment.Top;
                     verseRun.FontSize = 28;
                     tb.Inlines.Add(verseRun);
                     tb.Inlines.Add(new Run(matches.Groups[2].Value));
-                    tb.TextAlignment = TextAlignment.Center;
+                }
+                else
+                {
+                    tb.Text = html;
                 }
             }
+
+            CaptionText.Text = slide.GetCaption();
         }
 
         public void SelectSlide(int index)
         {
-            ((ListBoxItem)SlideList.Items[index]).IsSelected = true;
-            ((ListBoxItem)SlideList.Items[index]).Focus();
+            var selectedItem = (ListBoxItem)SlideList.Items[index]; 
+            selectedItem.IsSelected = true;
+            selectedItem.Focus();
+
+            //foreach (ListBoxItem child in SlideList.Items)
+            //{
+            //    child.Background = child.IsSelected ? selectedColor : currentColor;
+            //}
             SlideList.ScrollIntoView((ListBoxItem)SlideList.Items[index]);
         }
 

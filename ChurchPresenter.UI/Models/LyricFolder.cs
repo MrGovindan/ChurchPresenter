@@ -9,10 +9,16 @@ namespace ChurchPresenter.UI.Models
     public class Slide
     {
         protected readonly string text;
+        protected string caption;
 
         public Slide(string text)
         {
             this.text = text;
+        }
+
+        public Slide(string text, string caption) : this(text)
+        {
+            this.caption = caption;
         }
 
         public override string ToString()
@@ -22,7 +28,12 @@ namespace ChurchPresenter.UI.Models
 
         public virtual string ToHtml()
         {
-            return new string(text).Replace("\r", "").Replace("\n", "<br>");
+            return new string(text).Replace("\r", "").Replace("\n", "<br>").Replace("\"", "$quot;");
+        }
+
+        public virtual string GetCaption()
+        {
+            return caption;
         }
     }
 
@@ -38,12 +49,12 @@ namespace ChurchPresenter.UI.Models
         {
             this.title = title;
             this.lyrics = lyrics;
-            this.slides = GenerateSlides(lyrics);
+            this.slides = GenerateSlides(lyrics, title);
             this.searchTitle = searchTitle;
             this.searchLyrics = searchLyrics;
         }
 
-        private static Slide[] GenerateSlides(string xmlLyrics)
+        private static Slide[] GenerateSlides(string xmlLyrics, string title)
         {
             var doc = new XmlDocument();
             doc.LoadXml(xmlLyrics);
@@ -52,7 +63,7 @@ namespace ChurchPresenter.UI.Models
             var lyricsList = new List<Slide>();
 
             foreach (XmlNode verseNode in lyricNode.ChildNodes)
-                lyricsList.Add(new Slide(verseNode.FirstChild.InnerText));
+                lyricsList.Add(new Slide(verseNode.FirstChild.InnerText, title));
 
             return lyricsList.ToArray();
         }
