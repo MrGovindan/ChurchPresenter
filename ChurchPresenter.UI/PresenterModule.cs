@@ -13,6 +13,7 @@ namespace ChurchPresenter.UI
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<MainWindowPresenter>().SingleInstance().AutoActivate();
             builder.RegisterType<LibraryPresenter<Panel>>().SingleInstance().AutoActivate();
             builder.RegisterType<SongLibraryPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<BibleLibraryPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();

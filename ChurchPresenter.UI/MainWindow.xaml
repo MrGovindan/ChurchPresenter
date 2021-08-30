@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChurchPresenter.UI" xmlns:wpfviews="clr-namespace:ChurchPresenter.UI.WpfViews"
         mc:Ignorable="d"
-        MinHeight="540"
-        MinWidth="960"
         Background="#F0F0F0"
+        Width="1280"
+        Height="720"
         Title="MainWindow">
-    <Grid>
+    <Grid Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -24,6 +24,10 @@
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="File">
                 <MenuItem Header="Exit"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Name="ShowSetupView" Header="Setup"></MenuItem>
+                <MenuItem Name="ShowLiveView" Header="Live"></MenuItem>
             </MenuItem>
         </Menu>
 

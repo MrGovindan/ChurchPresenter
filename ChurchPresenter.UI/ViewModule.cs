@@ -26,6 +26,7 @@ namespace ChurchPresenter.UI
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<MainWindow>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<SongLibraryView>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<BibleLibraryView>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<LibraryView>().AsSelf().AsImplementedInterfaces().SingleInstance();
@@ -35,7 +36,6 @@ namespace ChurchPresenter.UI
             builder.RegisterType<LiveProjectionView>().AsSelf().Keyed<IProjectionView>("Live").SingleInstance();
             builder.RegisterType<PreviewSlideControlButtonsView>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<LiveSlideControlButtonsView>().AsSelf().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<MainWindow>().SingleInstance();
         }
     }
 
