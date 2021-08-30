@@ -3,9 +3,9 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ChurchPresenter.UI.WpfViews"
+      xmlns:local="clr-namespace:ChurchPresenter.UI.WpfViews" xmlns:iconpacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800">
+      d:DesignHeight="550" d:DesignWidth="400">
 
     <Grid.RowDefinitions>
         <RowDefinition Height="auto"/>
@@ -16,7 +16,7 @@
         <TextBlock Text="Service Manager" Padding="10 2 0 2"></TextBlock>
     </Border>
 
-    <Grid Grid.Row="1" Name="Categories">
+    <Grid Grid.Row="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -24,14 +24,31 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Name="TopButtonPanel">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Name="MakeFirst"><iconpacks:PackIconMaterial Kind="ArrowCollapseUp"/>
+                    <Button.ToolTip><TextBlock>Move item to the top of the service</TextBlock></Button.ToolTip>
+                </Button>
+                <Button Name="ShiftUp"><iconpacks:PackIconMaterial Kind="ArrowUp"/>
+                    <Button.ToolTip><TextBlock>Move item higher</TextBlock></Button.ToolTip>
+                </Button>
+                <Button Name="ShiftDown"><iconpacks:PackIconMaterial Kind="ArrowDown"/>
+                    <Button.ToolTip><TextBlock>Move item lower</TextBlock></Button.ToolTip>
+                </Button>
+                <Button Name="MakeLast"><iconpacks:PackIconMaterial Kind="ArrowCollapseDown"/>
+                    <Button.ToolTip><TextBlock>Move item to the bottom of the service</TextBlock></Button.ToolTip>
+                </Button>
+            </StackPanel>
         </Grid>
         <ListBox Grid.Row="1" Name="ServiceList">
         </ListBox>
         <Grid Grid.Row="0" Name="BottomButtonPanel">
         </Grid>
-    </Grid>
-
-
-    <Grid Grid.Row="1">
     </Grid>
 </Grid>

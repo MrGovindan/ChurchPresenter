@@ -24,18 +24,9 @@
             <Style TargetType="ListBoxItem">
                 <Setter Property="Background" Value="Transparent"/>
                 <Style.Triggers>
-
                     <Trigger Property="IsSelected" Value="True">
                         <Setter Property="Foreground" Value="Red"/>
                     </Trigger>
-
-                    <!--<MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsMouseOver" Value="True"/>
-                            <Condition Property="IsSelected" Value="True"/>
-                        </MultiTrigger.Conditions>
-                        <Setter Property="Background" Value="#A0FF0000"/>
-                    </MultiTrigger>-->
                 </Style.Triggers>
             </Style>
         </ListBox.ItemContainerStyle>
