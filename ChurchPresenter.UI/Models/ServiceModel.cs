@@ -9,8 +9,9 @@ namespace ChurchPresenter.UI.Models
 {
     class ServiceModel : IServiceModel
     {
-        public event Action<IFolder> ItemAdded;
+        public event Action<IFolder> FolderAdded;
         public event Action<int[]> ServiceReordered;
+        public event Action ServiceCleared;
 
         private List<IFolder> currentService = new List<IFolder>();
 
@@ -27,7 +28,7 @@ namespace ChurchPresenter.UI.Models
         public void AddFolder(IFolder folder)
         {
             currentService.Add(folder);
-            ItemAdded?.Invoke(folder);
+            FolderAdded?.Invoke(folder);
         }
 
         public IFolder[] GetFolders()
@@ -84,6 +85,12 @@ namespace ChurchPresenter.UI.Models
             var indices = Enumerable.Range(0, currentService.Count).ToList();
             modify(indices);
             ServiceReordered?.Invoke(indices.ToArray());
+        }
+
+        public void ClearService()
+        {
+            currentService.Clear();
+            ServiceCleared?.Invoke();
         }
     }
 }

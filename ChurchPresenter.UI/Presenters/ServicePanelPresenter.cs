@@ -22,6 +22,7 @@ namespace ChurchPresenter.UI.Presenters
         void EnableShiftUp(bool enabled);
         void EnableShiftDown(bool enabled);
         void UpdateServiceOrder(int[] newOrder);
+        void ClearFolders();
     }
 
     class ServicePanelPresenter
@@ -40,12 +41,14 @@ namespace ChurchPresenter.UI.Presenters
             this.model = model;
             this.selectedFolderModel = selectedFolderModel;
 
-            model.ItemAdded += item => view.AddFolder(item);
+            model.FolderAdded += item => view.AddFolder(item);
             model.ServiceReordered += view.UpdateServiceOrder;
+            model.ServiceCleared += () => view.ClearFolders();
 
             view.FolderSelected += HandleFolderSelected;
             view.FolderActivated += () => selectedFolderModel.PublishSelectedFolder(model.ItemAt(selectedIndex));
             view.FolderRemoved += HandleSongRemoved;
+
             view.FolderShitedUp += HandleFolderShiftedUp;
             view.FolderShitedDown += HandleFolderShiftedDown;
             view.FolderMadeTopmost += () => model.MakeFolderFirst(selectedIndex);

@@ -231,6 +231,19 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.Received().EnableShiftDown(true);
         }
 
+        [Test]
+        public void WhenServiceIsCleared_ViewIsUpdated()
+        {
+            // Arrange
+            var fixture = CreateTestFixture();
+
+            // Act
+            fixture.serviceModel.ClearService();
+
+            // Assert
+            fixture.view.Received().ClearFolders();
+        }
+
         [TestFixture]
         public class TestServiceReordering
         {

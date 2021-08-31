@@ -75,5 +75,10 @@ namespace ChurchPresenter.UI.WpfViews
             selected.IsSelected = true;
             ServiceList.Focus();
         }
+
+        public void ClearFolders()
+        {
+            ServiceList.Items.Clear();
+        }
     }
 }

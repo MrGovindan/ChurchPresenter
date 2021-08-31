@@ -8,8 +8,9 @@ namespace ChurchPresenter.UI.Models
 
     public interface IServiceModel
     {
-        event Action<IFolder> ItemAdded;
+        event Action<IFolder> FolderAdded;
         event Action<int[]> ServiceReordered;
+        event Action ServiceCleared;
 
         void AddFolder(IFolder folder);
         IFolder ItemAt(int index);
@@ -19,5 +20,6 @@ namespace ChurchPresenter.UI.Models
         void MakeFolderFirst(int index);
         void MakeFolderLast(int index);
         int ServiceLength();
+        void ClearService();
     }
 }

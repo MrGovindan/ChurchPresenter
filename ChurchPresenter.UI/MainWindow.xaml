@@ -23,11 +23,12 @@
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
             <MenuItem Header="File">
-                <MenuItem Header="Exit"></MenuItem>
+                <MenuItem Header="Exit"/>
+                <MenuItem Name="Import" Header="Import"/>
             </MenuItem>
             <MenuItem Header="View">
-                <MenuItem Name="ShowSetupView" Header="Setup"></MenuItem>
-                <MenuItem Name="ShowLiveView" Header="Live"></MenuItem>
+                <MenuItem Name="ShowSetupView" Header="Setup"/>
+                <MenuItem Name="ShowLiveView" Header="Live"/>
             </MenuItem>
         </Menu>
 
