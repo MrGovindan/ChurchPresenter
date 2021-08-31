@@ -40,31 +40,34 @@ namespace ChurchPresenter.UI.Models
                 var versePattern = new Regex(@"(\d+):(\d+)");
                 var bookPattern = new Regex(@"((\d\s)?([a-z]+))");
 
-                var slideData = serviceItem["data"][0]["raw_slide"].ToString();
-                var lines = slideData.Split("\n");
-
                 var slides = new List<ScriptureSlide>();
-                foreach (string l in lines)
+                foreach (JToken slideData in serviceItem["data"])
                 {
-                    var line = l.Trim();
-                    if (line == "")
-                        continue;
+                    var raw = slideData["raw_slide"].ToString();
+                    var lines = raw.Split("\n");
 
-                    var end = line.IndexOf(";");
-                    var verseText = line.Substring(0, end + 1);
-                    var scripture = line.Substring(end + 1);
-                    scripture = scripture.Replace("\\\"", "\"");
-
-                    var bookMatches = bookPattern.Match(header["title"].ToString().ToLower());
-                    var possibleBooks = BookHelper.FindMatchingBook(bookMatches.Groups[1].Value).GetEnumerator();
-                    possibleBooks.MoveNext();
-                    var book = BookHelper.FromString(possibleBooks.Current);
-
-                    var verseMatches = versePattern.Match(verseText);
-                    if (book != null)
+                    foreach (string l in lines)
                     {
-                        var verse = new Verse((Book)book, int.Parse(verseMatches.Groups[1].Value), int.Parse(verseMatches.Groups[2].Value));
-                        slides.Add(new ScriptureSlide(scripture, header["footer"][1].ToString(), verse));
+                        var line = l.Trim();
+                        if (line == "")
+                            continue;
+
+                        var end = line.IndexOf(";");
+                        var verseText = line.Substring(0, end + 1);
+                        var scripture = line.Substring(end + 1);
+                        scripture = scripture.Replace("\\\"", "\"");
+
+                        var bookMatches = bookPattern.Match(header["title"].ToString().ToLower());
+                        var possibleBooks = BookHelper.FindMatchingBook(bookMatches.Groups[1].Value).GetEnumerator();
+                        possibleBooks.MoveNext();
+                        var book = BookHelper.FromString(possibleBooks.Current);
+
+                        var verseMatches = versePattern.Match(verseText);
+                        if (book != null)
+                        {
+                            var verse = new Verse((Book)book, int.Parse(verseMatches.Groups[1].Value), int.Parse(verseMatches.Groups[2].Value));
+                            slides.Add(new ScriptureSlide(scripture, header["footer"][1].ToString(), verse));
+                        }
                     }
                 }
                 folder.slides = slides;
