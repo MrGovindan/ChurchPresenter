@@ -90,7 +90,6 @@
                 </Grid>
                 <TextBlock 
                     Name="CaptionText"
-                    Text="Test"
                     FontSize="32"
                     Foreground="Red"
                     FontFamily="Arial"

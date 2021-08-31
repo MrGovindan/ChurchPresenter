@@ -5,6 +5,7 @@ using ChurchPresenter.UI.WpfViews;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -42,8 +43,10 @@ namespace ChurchPresenter.UI
             livePanel = livePanelView;
             this.serviceModel = serviceModel;
             servicePanel = serviceView;
-            
+
             InitializeComponent();
+
+            libraryPanel.MinWidth = 200;
 
             Grid.SetColumn(previewPanel, 0);
 
@@ -105,12 +108,15 @@ namespace ChurchPresenter.UI
             cd.Width = new GridLength(0);
             MainGrid.ColumnDefinitions[0] = cd;
             LeftPanel.Children.Remove(libraryPanel);
+            LeftSplitter.IsEnabled = false;
 
             cd = new ColumnDefinition();
             cd.Width = new GridLength(0);
             CenterPanel.ColumnDefinitions[0] = cd;
             CenterPanel.Children.Remove(previewPanel);
+
             Width = ActualWidth / 2;
+            Left += Width;
 
             ShowSetupView.IsEnabled = true;
             ShowLiveView.IsEnabled = false;
@@ -119,17 +125,22 @@ namespace ChurchPresenter.UI
         private void ArrangeForSetup()
         {
             var cd = new ColumnDefinition();
-            cd.Width = new GridLength(400);
+            cd.Width = new GridLength(1, GridUnitType.Auto);
+            cd.MinWidth = 200;
             MainGrid.ColumnDefinitions[0] = cd;
             LeftPanel.Children.Add(libraryPanel);
+            LeftSplitter.IsEnabled = true;
 
             cd = new ColumnDefinition();
             cd.Width = new GridLength(1, GridUnitType.Star);
             CenterPanel.ColumnDefinitions[0] = cd;
             CenterPanel.Children.Add(previewPanel);
 
+            var w = ActualWidth;
             if (ActualWidth != 0)
                 Width = ActualWidth * 2;
+
+            Left -= w;
 
             ShowSetupView.IsEnabled = false;
             ShowLiveView.IsEnabled = true;

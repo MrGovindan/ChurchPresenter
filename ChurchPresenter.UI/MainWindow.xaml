@@ -16,9 +16,9 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="400"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="400" MinWidth="200"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="400" MinWidth="200"/>
         </Grid.ColumnDefinitions>
 
         <Menu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
@@ -32,14 +32,36 @@
             </MenuItem>
         </Menu>
 
-        <Grid Name="LeftPanel" Grid.Column="0" Grid.Row="1">
-        </Grid>
+        <Grid Name="LeftPanel" Grid.Column="0" Grid.Row="1"/>
+
+        <GridSplitter 
+            Name="LeftSplitter"
+            Grid.Column="0" 
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            Width="4"
+            Background="Transparent"
+            ResizeDirection="Columns"
+            ResizeBehavior="CurrentAndNext"/>
+
         <Grid Name="CenterPanel" Grid.Column="1" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <Grid Name="RightPanel" Grid.Column="2" Grid.Row="1"></Grid>
+
+        <Grid Name="RightPanel" Grid.Column="2" Grid.Row="1"/>
+
+        <GridSplitter 
+            Grid.Column="2" 
+            Grid.Row="1" 
+            Width="4" 
+            Background="Transparent"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            ResizeDirection="Columns" 
+            ResizeBehavior="PreviousAndCurrent"/>
     </Grid>
 </Window>
