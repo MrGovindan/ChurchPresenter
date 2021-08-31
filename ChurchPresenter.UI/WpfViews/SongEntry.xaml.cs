@@ -1,4 +1,5 @@
 ﻿using ChurchPresenter.UI.Models;
+using ChurchPresenter.UI.Models.Folder;
 using MahApps.Metro.IconPacks;
 using System;
 using System.Collections.Generic;

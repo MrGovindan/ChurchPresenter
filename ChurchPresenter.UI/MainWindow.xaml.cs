@@ -37,10 +37,9 @@ namespace ChurchPresenter.UI
             servicePanel = serviceView;
             
             InitializeComponent();
-            //LeftPanel.Children.Add(libraryPanel);
 
-            //CenterPanel.Children.Add(previewPanel);
             Grid.SetColumn(previewPanel, 0);
+
             CenterPanel.Children.Add(livePanel);
             Grid.SetColumn(livePanel, 1);
 

@@ -1,5 +1,6 @@
 ﻿using Autofac.Features.AttributeFilters;
 using ChurchPresenter.UI.Models;
+using ChurchPresenter.UI.Models.Folder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace ChurchPresenter.UI.Presenters
         void SetBibleVersions(string[] versions);
     }
 
-    class BibleLibraryPresenter
+    partial class BibleLibraryPresenter
     {
         private static Regex searchPattern = new Regex(@"((\d?)\s?([a-z]+))\s?(\d+)(:(\d+)(-(\d+))?)?");
 
@@ -163,51 +164,6 @@ namespace ChurchPresenter.UI.Presenters
                 result += "-" + (previousIndex + scriptures.start.verse).ToString();
 
             return result;
-        }
-
-        private class ScriptureSlide : Slide
-        {
-            private string version;
-            private Verse verse;
-
-            internal ScriptureSlide(string text, string version, Verse verse) : base(text)
-            {
-                this.version = version;
-                this.verse = verse;
-                this.caption = string.Format("{0} {1}:{2} {3}",
-                    BookHelper.ToString(verse.book), verse.chapter, verse.verse, version);
-            }
-
-            public override string ToString()
-            {
-                return string.Format("{0}:{1} {2}", verse.chapter, verse.verse, text);
-            }
-
-            public override string ToHtml()
-            {
-                return string.Format("<sup>{0}:{1}</sup> {2}", verse.chapter, verse.verse, text);
-            }
-        }
-
-        private class ScriptureFolder : IFolder
-        {
-            internal string title = "";
-            internal List<ScriptureSlide> slides = new List<ScriptureSlide>();
-
-            public FolderType GetFolderType()
-            {
-                return FolderType.Scripture;
-            }
-
-            public Slide[] GetSlides()
-            {
-                return slides.ToArray();
-            }
-
-            public string GetTitle()
-            {
-                return title;
-            }
         }
     }
 }

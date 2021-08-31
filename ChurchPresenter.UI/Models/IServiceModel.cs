@@ -1,21 +1,10 @@
-﻿using System;
+﻿using ChurchPresenter.UI.Models.Folder;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    public enum FolderType
-    {
-        Lyric,
-        Scripture
-    }
-
-    public interface IFolder
-    {
-        FolderType GetFolderType();
-        string GetTitle();
-        Slide[] GetSlides();
-    }
 
     public interface IServiceModel
     {
