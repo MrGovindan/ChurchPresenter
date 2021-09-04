@@ -28,7 +28,7 @@ namespace ChurchPresenter.UI.Services.SlideEncoder
 
         private static string EncodeAsHtml(string text)
         {
-            return HttpUtility.HtmlEncode(text);
+            return HttpUtility.HtmlEncode(text).Replace("\n", "<br/>");
         }
     }
 }

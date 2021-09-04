@@ -74,6 +74,21 @@ namespace ChurchPresenter.UI.Tests
         }
 
         [Test]
+        public void GivenAPartWithALineBreak_OutputContainsBrTag()
+        {
+            // Arrange
+            var parts = new List<TextPart>();
+            parts.Add(TextPart.AsNormal("Foo\nBar"));
+            var slide = new Slide(parts, "");
+
+            // Act
+            var actual = new HtmlSlideEncoder().Encode(slide);
+
+            // Assert
+            Assert.That(actual, Is.EqualTo("Foo<br/>Bar"));
+        }
+
+        [Test]
         public void GivenASlideWithQuotes_OutputHasQuotesReplacedWithHtmlCode()
         {
             // Arrange
