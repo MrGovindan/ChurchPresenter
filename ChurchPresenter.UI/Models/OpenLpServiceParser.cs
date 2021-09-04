@@ -34,13 +34,12 @@ namespace ChurchPresenter.UI.Models
             }
             else
             {
-                var folder = new ScriptureFolder();
-                folder.title = header["title"].ToString();
+                var folder = new ScriptureFolder { title = header["title"].ToString() };
 
                 var versePattern = new Regex(@"(\d+):(\d+)");
                 var bookPattern = new Regex(@"((\d\s)?([a-z]+))");
 
-                var slides = new List<ScriptureSlide>();
+                var slides = new List<Slide>();
                 foreach (JToken slideData in serviceItem["data"])
                 {
                     var raw = slideData["raw_slide"].ToString();
@@ -54,7 +53,7 @@ namespace ChurchPresenter.UI.Models
 
                         var end = line.IndexOf(";");
                         var verseText = line.Substring(0, end + 1);
-                        var scripture = line.Substring(end + 1);
+                        var scripture = line[(end + 1)..];
                         scripture = scripture.Replace("\\\"", "\"");
 
                         var bookMatches = bookPattern.Match(header["title"].ToString().ToLower());
@@ -66,7 +65,12 @@ namespace ChurchPresenter.UI.Models
                         if (book != null)
                         {
                             var verse = new Verse((Book)book, int.Parse(verseMatches.Groups[1].Value), int.Parse(verseMatches.Groups[2].Value));
-                            slides.Add(new ScriptureSlide(scripture, header["footer"][1].ToString(), verse));
+                            var scriptureParts = new List<TextPart>
+                            {
+                                TextPart.AsSuperscript(string.Format("{0}:{1}", verse.chapter, verse.verse)),
+                                TextPart.AsNormal(scripture)
+                            };
+                            slides.Add(new Slide(scriptureParts, ""));
                         }
                     }
                 }

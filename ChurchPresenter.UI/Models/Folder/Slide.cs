@@ -1,33 +1,70 @@
-﻿namespace ChurchPresenter.UI.Models.Folder
-{
-    public class Slide
-    {
-        protected readonly string text;
-        protected string caption;
+﻿using System;
+using System.Collections.Generic;
 
-        public Slide(string text)
+namespace ChurchPresenter.UI.Models.Folder
+{
+    public enum TextType
+    {
+        Normal,
+        Superscript,
+    }
+
+    public readonly struct TextPart
+    {
+        public readonly TextType Type;
+        public readonly string Text;
+
+        public TextPart(string text, TextType type)
         {
-            this.text = text;
+            Text = text;
+            Type = type;
         }
 
-        public Slide(string text, string caption) : this(text)
+        internal static TextPart AsSuperscript(string text)
         {
+            return new TextPart(text, TextType.Superscript);
+        }
+
+        internal static TextPart AsNormal(string text)
+        {
+            return new TextPart(text, TextType.Normal);
+        }
+    }
+
+    public class Slide
+    {
+        private readonly List<TextPart> textParts = new List<TextPart>();
+        private readonly string caption;
+
+        public Slide(string text) : this(text, "")
+        {
+        }
+
+        public Slide(string text, string caption)
+        {
+            textParts.Add(CreateNormalText(text));
             this.caption = caption;
         }
 
-        public override string ToString()
+        public Slide(IReadOnlyList<TextPart> textParts, string caption)
         {
-            return new string(text);
+            this.textParts = new List<TextPart>(textParts);
+            this.caption = caption;
         }
 
-        public virtual string ToHtml()
-        {
-            return new string(text).Replace("\r", "").Replace("\n", "<br>").Replace("\"", "$quot;");
-        }
-
-        public virtual string GetCaption()
+        public string GetCaption()
         {
             return caption;
+        }
+
+        public IReadOnlyList<TextPart> GetParts()
+        {
+            return textParts;
+        }
+
+        private TextPart CreateNormalText(string text)
+        {
+            return new TextPart(text, TextType.Normal);
         }
     }
 }

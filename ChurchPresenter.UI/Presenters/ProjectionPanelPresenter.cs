@@ -3,6 +3,7 @@ using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Models.Folder;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ChurchPresenter.UI.Presenters
@@ -12,7 +13,7 @@ namespace ChurchPresenter.UI.Presenters
         event Action<int> SlideSelected;
 
         void SetTitle(string title);
-        void SetSlides(Slide[] slides);
+        void SetSlides(string[] slides);
         void SetPreviewText(Slide slide);
         void SelectSlide(int index);
         void SetPreviewTextVisible(bool visible);
@@ -44,9 +45,9 @@ namespace ChurchPresenter.UI.Presenters
 
     class ProjectionPanelPresenter
     {
-        private IProjectionView view;
-        protected IFolder currentFolder;
-        private ISelectedSliderPublisher selectedSlidePublisher;
+        private readonly IProjectionView view;
+        private readonly ISelectedSliderPublisher selectedSlidePublisher;
+        private IFolder currentFolder;
 
         public ProjectionPanelPresenter(
             IProjectionView view,
@@ -66,7 +67,7 @@ namespace ChurchPresenter.UI.Presenters
         {
             currentFolder = folder;
             view.SetTitle(folder.GetTitle());
-            view.SetSlides(folder.GetSlides());
+            view.SetSlides(folder.GetSlides().Select(s => string.Join(" ", s.GetParts().Select(p => p.Text))).ToArray());
             selectedSlidePublisher.PublishSelectedSlide(folder.GetSlides()[0]);
         }
 

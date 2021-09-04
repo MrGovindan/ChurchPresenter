@@ -12,9 +12,14 @@ namespace ChurchPresenter.UI.Tests.Builders
 
         internal TestSlideBuilder WithNSlides(int n)
         {
-            slides = new List<Slide>();
             for (int i = 0; i < n; ++i)
-                slides.Add(new Slide(i.ToString()));
+                slides.Add(new Slide("text " + i, "caption " + i));
+            return this;
+        }
+
+        internal TestSlideBuilder WithSlide(string text)
+        {
+            slides.Add(new Slide(text, ""));
             return this;
         }
 

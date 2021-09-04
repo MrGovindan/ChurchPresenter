@@ -1,8 +1,6 @@
-﻿using ChurchPresenter.UI.Models;
-using ChurchPresenter.UI.Models.Folder;
+﻿using ChurchPresenter.UI.Models.Folder;
 using ChurchPresenter.UI.Presenters;
 using System;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -12,9 +10,6 @@ namespace ChurchPresenter.UI.WpfViews
 {
     public partial class ProjectionView : Grid, IProjectionView
     {
-        Brush currentColor = new SolidColorBrush(Colors.Transparent);
-        Brush selectedColor = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
-
         public event Action<int> SlideSelected;
 
         protected ProjectionView(string heading, SlideControlButtonsView slideControlButtonsView)
@@ -23,31 +18,34 @@ namespace ChurchPresenter.UI.WpfViews
             Heading.Text = heading;
 
             Children.Add(slideControlButtonsView);
-            Grid.SetRow(slideControlButtonsView, 3);
+            SetRow(slideControlButtonsView, 3);
         }
 
-        public void SetSlides(Slide[] slides)
+        public void SetSlides(string[] slides)
         {
             SlideList.Items.Clear();
             var slideIndex = 0;
             foreach (var slide in slides)
             {
                 var currentIndex = slideIndex;
-                //SlideList.Items.Add(new SlideView(slide, () => SlideSelected?.Invoke(currentIndex)));
                 SlideList.Items.Add(CreateNewSlideItem(slide, currentIndex));
                 slideIndex++;
             }
         }
 
-        private ListBoxItem CreateNewSlideItem(Slide slide, int index)
+        private ListBoxItem CreateNewSlideItem(string slide, int index)
         {
-            var item = new ListBoxItem();
-            item.BorderBrush = new SolidColorBrush(Colors.Gray);
-            item.BorderThickness = new Thickness(1, 1, 1, 1);
-            item.MinHeight = 40;
-            var text = new TextBlock();
-            text.TextWrapping = TextWrapping.Wrap;
-            text.Text = slide.ToString();
+            var item = new ListBoxItem
+            {
+                BorderBrush = new SolidColorBrush(Colors.Gray),
+                BorderThickness = new Thickness(1, 1, 1, 1),
+                MinHeight = 40
+            };
+            var text = new TextBlock
+            {
+                TextWrapping = TextWrapping.Wrap,
+                Text = slide
+            };
             item.Content = text;
             item.Selected += (o, e) => SlideSelected?.Invoke(index);
             return item;
@@ -58,28 +56,28 @@ namespace ChurchPresenter.UI.WpfViews
             SongTitle.Text = title;
         }
 
-        private static readonly Regex supPattern = new Regex(@"<sup>(.*)<\/sup>(.*)");
-
         public void SetPreviewText(Slide slide)
         {
-            var html = slide.ToHtml().Replace("<br>", "\n");
-            var matches = supPattern.Match(html);
-
             foreach (var child in TextGrid.Children)
             {
                 var tb = (TextBlock)child;
-                if (matches.Success)
+                tb.Inlines.Clear();
+
+                foreach (var part in slide.GetParts())
                 {
-                    tb.Inlines.Clear();
-                    var verseRun = new Run(matches.Groups[1].Value);
-                    verseRun.BaselineAlignment = BaselineAlignment.Top;
-                    verseRun.FontSize = 28;
-                    tb.Inlines.Add(verseRun);
-                    tb.Inlines.Add(new Run(matches.Groups[2].Value));
-                }
-                else
-                {
-                    tb.Text = html;
+
+                    if (part.Type == TextType.Superscript)
+                    {
+                        tb.Inlines.Add(new Run(part.Text)
+                        {
+                            BaselineAlignment = BaselineAlignment.Superscript,
+                            FontSize = 28
+                        });
+                    }
+                    else
+                    {
+                        tb.Inlines.Add(new Run(part.Text));
+                    }
                 }
             }
 
@@ -91,11 +89,6 @@ namespace ChurchPresenter.UI.WpfViews
             var selectedItem = (ListBoxItem)SlideList.Items[index]; 
             selectedItem.IsSelected = true;
             selectedItem.Focus();
-
-            //foreach (ListBoxItem child in SlideList.Items)
-            //{
-            //    child.Background = child.IsSelected ? selectedColor : currentColor;
-            //}
             SlideList.ScrollIntoView((ListBoxItem)SlideList.Items[index]);
         }
 

@@ -58,6 +58,8 @@ namespace ChurchPresenter.UI
                     return songLibraryContent;
                 case LibraryContent.Bibles:
                     return bibleLibraryContent;
+                default:
+                    break;
             }
             return null;
         }

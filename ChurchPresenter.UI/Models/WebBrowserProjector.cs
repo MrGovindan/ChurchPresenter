@@ -1,28 +1,32 @@
 ﻿using Autofac.Features.AttributeFilters;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+using ChurchPresenter.UI.Services;
+using ChurchPresenter.UI.Services.SlideEncoder;
+using Newtonsoft.Json.Linq;
 
 namespace ChurchPresenter.UI.Models
 {
     public class WebBrowserProjector
     {
-        WebSocketServer.WebSocketServer server;
+        readonly IWriter<string> server;
         bool slideVisible = true;
         string currentSlide = "";
+        readonly JObject blankSlide = new JObject();
 
         public WebBrowserProjector(
             [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
-            ISlideVisibilityModel slideVisibilityPublisher)
+            ISlideVisibilityModel slideVisibilityPublisher,
+            ISlideEncoder slideEncoder,
+            IWriter<string> output)
         {
-            server = new WebSocketServer.WebSocketServer(new IPEndPoint(IPAddress.Loopback, 5000));
+            blankSlide["text"] = "";
+            blankSlide["caption"] = "";
+
+            server = output;
 
             selectedSlidePublisher.SelectedSlideChanged += slide =>
             {
-                currentSlide = string.Format("{{ \"text\": \"{0}\", \"caption\": \"{1}\" }}",
-                                             slide.ToHtml().Replace("\"", "&quot;"),
-                                             slide.GetCaption());
+                var json = new JObject { ["text"] = slideEncoder.Encode(slide), ["caption"] = slide.GetCaption() };
+                currentSlide = json.ToString();
                 Show();
             };
             slideVisibilityPublisher.SlideVisibilityChanged += visible =>
@@ -31,9 +35,10 @@ namespace ChurchPresenter.UI.Models
                 Show();
             };
         }
+
         private void Show()
         {
-            server.WriteString(slideVisible ? currentSlide : "{ \"text\": \"\", \"caption\": \"\" }");
+            server.Write(slideVisible ? currentSlide : blankSlide.ToString());
         }
     }
 }

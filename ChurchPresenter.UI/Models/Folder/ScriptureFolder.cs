@@ -6,7 +6,7 @@ namespace ChurchPresenter.UI.Models.Folder
     class ScriptureFolder : IFolder
     {
         internal string title = "";
-        internal List<ScriptureSlide> slides = new List<ScriptureSlide>();
+        internal List<Slide> slides = new List<Slide>();
 
         public FolderType GetFolderType()
         {

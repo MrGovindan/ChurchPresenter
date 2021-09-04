@@ -13,7 +13,7 @@ namespace ChurchPresenter.UI.Models
         public event Action<int[]> ServiceReordered;
         public event Action ServiceCleared;
 
-        private List<IFolder> currentService = new List<IFolder>();
+        private readonly List<IFolder> currentService = new List<IFolder>();
 
         public IFolder ItemAt(int index)
         {
@@ -43,12 +43,12 @@ namespace ChurchPresenter.UI.Models
 
         public void SwapFolderOrder(int first, int second)
         {
-            Action<IList> swap = (collection) =>
+            void swap(IList collection)
             {
                 var temp = collection[first];
                 collection[first] = collection[second];
                 collection[second] = temp;
-            };
+            }
 
             swap(currentService);
             UpdateIndices(swap);
@@ -56,12 +56,12 @@ namespace ChurchPresenter.UI.Models
 
         public void MakeFolderFirst(int index)
         {
-            Action<IList> makeFirst = (collection) =>
+            void makeFirst(IList collection)
             {
                 var temp = collection[index];
                 collection.RemoveAt(index);
                 collection.Insert(0, temp);
-            };
+            }
 
             makeFirst(currentService);
             UpdateIndices(makeFirst);
@@ -69,12 +69,12 @@ namespace ChurchPresenter.UI.Models
 
         public void MakeFolderLast(int index)
         {
-            Action<IList> makeLast = (collection) =>
+            void makeLast(IList collection)
             {
                 var temp = collection[index];
                 collection.RemoveAt(index);
                 collection.Add(temp);
-            };
+            }
 
             makeLast(currentService);
             UpdateIndices(makeLast);

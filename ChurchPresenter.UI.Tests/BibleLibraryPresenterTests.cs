@@ -180,10 +180,11 @@ namespace ChurchPresenter.UI.Tests
             Assert.That(addedFolder.GetFolderType(), Is.EqualTo(FolderType.Scripture));
             Assert.That(addedFolder.GetTitle(), Is.EqualTo("Revelation 3:1-3 KJV"));
             Assert.That(addedFolder.GetSlides().Length, Is.EqualTo(3));
-            Assert.That(addedFolder.GetSlides()[0].ToString(), Is.EqualTo("3:1 Verse 1"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[0].Text.ToString(), Is.EqualTo("3:1"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[1].Text.ToString(), Is.EqualTo("Verse 1"));
             Assert.That(addedFolder.GetSlides()[0].GetCaption(), Is.EqualTo("Revelation 3:1 KJV"));
-            Assert.That(addedFolder.GetSlides()[1].ToString(), Is.EqualTo("3:2 Verse 2"));
-            Assert.That(addedFolder.GetSlides()[2].ToString(), Is.EqualTo("3:3 Verse 3"));
+            Assert.That(addedFolder.GetSlides()[1].GetParts()[0].Text.ToString(), Is.EqualTo("3:2"));
+            Assert.That(addedFolder.GetSlides()[2].GetParts()[1].Text.ToString(), Is.EqualTo("Verse 3"));
         }
 
         [Test]
@@ -205,7 +206,8 @@ namespace ChurchPresenter.UI.Tests
             // Assert
             Assert.That(addedFolder.GetFolderType(), Is.EqualTo(FolderType.Scripture));
             Assert.That(addedFolder.GetTitle(), Is.EqualTo("Revelation 3:10-14 KJV"));
-            Assert.That(addedFolder.GetSlides()[0].ToString(), Is.EqualTo("3:10 Verse 10"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[0].Text, Is.EqualTo("3:10"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[1].Text, Is.EqualTo("Verse 10"));
             Assert.That(addedFolder.GetSlides()[0].GetCaption(), Is.EqualTo("Revelation 3:10 KJV"));
         }
 
@@ -230,8 +232,10 @@ namespace ChurchPresenter.UI.Tests
             Assert.That(addedFolder.GetFolderType, Is.EqualTo(FolderType.Scripture));
             Assert.That(addedFolder.GetTitle(), Is.EqualTo("Revelation 3:1, 3 KJV"));
             Assert.That(addedFolder.GetSlides().Length, Is.EqualTo(2));
-            Assert.That(addedFolder.GetSlides()[0].ToString(), Is.EqualTo("3:1 Verse 1"));
-            Assert.That(addedFolder.GetSlides()[1].ToString(), Is.EqualTo("3:3 Verse 3"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[0].Text.ToString(), Is.EqualTo("3:1"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[1].Text.ToString(), Is.EqualTo("Verse 1"));
+            Assert.That(addedFolder.GetSlides()[1].GetParts()[0].Text.ToString(), Is.EqualTo("3:3"));
+            Assert.That(addedFolder.GetSlides()[1].GetParts()[1].Text.ToString(), Is.EqualTo("Verse 3"));
         }
 
         [Test]
@@ -254,10 +258,12 @@ namespace ChurchPresenter.UI.Tests
             // Assert
             Assert.That(addedFolder.GetFolderType, Is.EqualTo(FolderType.Scripture));
             Assert.That(addedFolder.GetTitle(), Is.EqualTo("Revelation 3:1, 3-5 KJV"));
-            Assert.That(addedFolder.GetSlides()[0].ToString(), Is.EqualTo("3:1 Verse 1"));
-            Assert.That(addedFolder.GetSlides()[1].ToString(), Is.EqualTo("3:3 Verse 3"));
-            Assert.That(addedFolder.GetSlides()[2].ToString(), Is.EqualTo("3:4 Verse 4"));
-            Assert.That(addedFolder.GetSlides()[3].ToString(), Is.EqualTo("3:5 Verse 5"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[0].Text, Is.EqualTo("3:1"));
+            Assert.That(addedFolder.GetSlides()[0].GetParts()[1].Text, Is.EqualTo("Verse 1"));
+            Assert.That(addedFolder.GetSlides()[1].GetParts()[0].Text, Is.EqualTo("3:3"));
+            Assert.That(addedFolder.GetSlides()[1].GetParts()[1].Text, Is.EqualTo("Verse 3"));
+            Assert.That(addedFolder.GetSlides()[3].GetParts()[0].Text, Is.EqualTo("3:5"));
+            Assert.That(addedFolder.GetSlides()[3].GetParts()[1].Text, Is.EqualTo("Verse 5"));
         }
 
         [TestCase("j2")]

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChurchPresenter.WebSocketServer
+namespace ChurchPresenter.UI.Services.WebSocket
 {
     internal class WebSocketFrameBuilder
     {

@@ -10,7 +10,7 @@ namespace ChurchPresenter.UI.Models
 {
     public class SongLibrary : ISongLibrary
     {
-        List<LyricFolder> currentLibrary;
+        readonly List<LyricFolder> currentLibrary;
         
         public SongLibrary()
         {
@@ -22,10 +22,10 @@ namespace ChurchPresenter.UI.Models
                 var command = connection.CreateCommand();
                 command.CommandText = "SELECT * from songs";
 
-                using (var reader = command.ExecuteReader())
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                        currentLibrary.Add(new LyricFolder(reader.GetString(1), reader.GetString(3), reader.GetString(9), reader.GetString(10)));
+                    currentLibrary.Add(new LyricFolder(reader.GetString(1), reader.GetString(3), reader.GetString(9), reader.GetString(10)));
                 }
             }
 
@@ -40,7 +40,7 @@ namespace ChurchPresenter.UI.Models
 
         public Task<IList<LyricFolder>> GetMatchingSongs(string pattern)
         {
-            Predicate<LyricFolder> match = s => s.GetSearchTitle().Contains(pattern.ToLower()) | s.GetSearchLyrics().Contains(pattern.ToLower());
+            bool match(LyricFolder s) => s.GetSearchTitle().Contains(pattern.ToLower()) | s.GetSearchLyrics().Contains(pattern.ToLower());
             var result = new List<LyricFolder>(currentLibrary.FindAll(match));
             return Task.FromResult((IList<LyricFolder>)result);
         }

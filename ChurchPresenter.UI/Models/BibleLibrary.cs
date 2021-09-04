@@ -8,7 +8,7 @@ namespace ChurchPresenter.UI.Models
 {
     class BibleLibrary : IBibleModel
     {
-        private List<string> availableBibleVersions = new List<string>();
+        private readonly List<string> availableBibleVersions = new List<string>();
 
         private event Action<string[]> BibleVersionsUpdatedImpl;
 
@@ -26,13 +26,13 @@ namespace ChurchPresenter.UI.Models
         }
 
         private const string bibleDir = "/openlp/data/bibles/";
-        private static string userDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\", "/");
+        private static readonly string userDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\", "/");
 
         public BibleLibrary()
         {
             foreach (var file in Directory.GetFiles(userDir + bibleDir))
             {
-                var filename = file.Substring(file.LastIndexOfAny(new char[] { '\\', '/' }) + 1);
+                var filename = file[(file.LastIndexOfAny(new char[] { '\\', '/' }) + 1)..];
                 if (filename.Contains(".sqlite"))
                 {
                     filename = filename.Substring(0, filename.IndexOf("."));
@@ -57,10 +57,10 @@ namespace ChurchPresenter.UI.Models
                 command.Parameters.AddWithValue("$chapter", verse.chapter);
                 command.Parameters.AddWithValue("$verse", verse.verse);
 
-                using (var reader = command.ExecuteReader())
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                        verses.Add(reader.GetString(4));
+                    verses.Add(reader.GetString(4));
                 }
             }
 
@@ -76,10 +76,10 @@ namespace ChurchPresenter.UI.Models
                 command.CommandText = "SELECT id FROM book WHERE book_reference_id == $book";
                 command.Parameters.AddWithValue("$book", (int)book);
 
-                using (var reader = command.ExecuteReader())
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                        return reader.GetInt32(0);
+                    return reader.GetInt32(0);
                 }
             }
 
@@ -101,10 +101,10 @@ namespace ChurchPresenter.UI.Models
                 command.Parameters.AddWithValue("$start_verse", startVerse.verse);
                 command.Parameters.AddWithValue("$end_verse", endVerse.verse);
 
-                using (var reader = command.ExecuteReader())
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                        verses.Add(reader.GetString(4));
+                    verses.Add(reader.GetString(4));
                 }
             }
 
@@ -125,13 +125,11 @@ namespace ChurchPresenter.UI.Models
                 command.Parameters.AddWithValue("$book", bookId);
                 command.Parameters.AddWithValue("$chapter", chapter);
 
-                using (var reader = command.ExecuteReader())
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        lastVerse = reader.GetInt32(3);
-                        verses.Add(reader.GetString(4));
-                    }
+                    lastVerse = reader.GetInt32(3);
+                    verses.Add(reader.GetString(4));
                 }
             }
 

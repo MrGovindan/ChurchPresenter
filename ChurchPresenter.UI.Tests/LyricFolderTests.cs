@@ -48,7 +48,7 @@ Let me be singing when the evening comes]]>
             var testLyricFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Assert
-            Assert.That(testLyricFolder.GetSlides()[0].ToString(),
+            Assert.That(testLyricFolder.GetSlides()[0].GetParts()[0].Text.ToString(),
                 Is.EqualTo("Bless the Lord, Oh my soul, O my soul\r\nWorship His Holy Name"));
         }
 

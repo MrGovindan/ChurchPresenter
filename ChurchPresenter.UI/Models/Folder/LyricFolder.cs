@@ -9,7 +9,6 @@ namespace ChurchPresenter.UI.Models.Folder
     public class LyricFolder : IFolder
     {
         private readonly string title;
-        private readonly string lyrics;
         private readonly Slide[] slides;
         private readonly string searchTitle;
         private readonly string searchLyrics;
@@ -17,8 +16,7 @@ namespace ChurchPresenter.UI.Models.Folder
         public LyricFolder(string title, string lyrics, string searchTitle, string searchLyrics)
         {
             this.title = title;
-            this.lyrics = lyrics;
-            this.slides = GenerateSlides(lyrics, title);
+            slides = GenerateSlides(lyrics, title);
             this.searchTitle = searchTitle;
             this.searchLyrics = searchLyrics;
         }

@@ -77,7 +77,7 @@ namespace ChurchPresenter.UI.Models
 
     public class BookHelper
     {
-        private static List<string> searchableBooks = new List<string>
+        private static readonly List<string> searchableBooks = new List<string>
         {
         "1 Chronicles", "1 Corinthians", "1 John", "1 Kings", "1 Peter",
         "1 Samuel", "1 Thessalonians", "1 Timothy", "2 Chronicles", "2 Corinthians",
@@ -100,150 +100,150 @@ namespace ChurchPresenter.UI.Models
 
         public static Book? FromString(string s)
         {
-            switch(s)
+            return s switch
             {
-                case "1 Chronicles": return Book.CHRONICLES1;
-                case "1 Corinthians": return Book.CORINTHIANS1;
-                case "1 John": return Book.JOHN1;
-                case "1 Kings": return Book.KINGS1;
-                case "1 Peter": return Book.PETER1;
-                case "1 Samuel": return Book.SAMUEL1;
-                case "1 Thessalonians": return Book.THESSALONIANS1;
-                case "1 Timothy": return Book.TIMOTHY1;
-                case "2 Chronicles": return Book.CHRONICLES2;
-                case "2 Corinthians": return Book.CORINTHIANS2;
-                case "2 John": return Book.JOHN2;
-                case "2 Kings": return Book.KINGS2;
-                case "2 Peter": return Book.PETER2;
-                case "2 Samuel": return Book.SAMUEL2;
-                case "2 Thessalonians": return Book.THESSALONIANS2;
-                case "2 Timothy": return Book.TIMOTHY2;
-                case "3 John": return Book.JOHN3;
-                case "Acts": return Book.ACTS;
-                case "Amos": return Book.AMOS;
-                case "Colossians": return Book.COLOSSIANS;
-                case "Daniel": return Book.DANIEL;
-                case "Deuteronomy": return Book.DEUTERONOMY;
-                case "Ecclesiastes": return Book.ECCLESIASTES;
-                case "Ephesians": return Book.EPHESIANS;
-                case "Esther": return Book.ESTHER;
-                case "Exodus": return Book.EXODUS;
-                case "Ezekiel": return Book.EZEKIEL;
-                case "Ezra": return Book.EZRA;
-                case "Galatians": return Book.GALATIANS;
-                case "Genesis": return Book.GENESIS;
-                case "Habakkuk": return Book.HABAKKUK;
-                case "Haggai": return Book.HAGGAI;
-                case "Hebrews": return Book.HEBREWS;
-                case "Hosea": return Book.HOSEA;
-                case "Isaiah": return Book.ISAIAH;
-                case "James": return Book.JAMES;
-                case "Jeremiah": return Book.JEREMIAH;
-                case "Job": return Book.JOB;
-                case "Joel": return Book.JOEL;
-                case "John": return Book.JOHN;
-                case "Jonah": return Book.JONAH;
-                case "Joshua": return Book.JOSHUA;
-                case "Jude": return Book.JUDE;
-                case "Judges": return Book.JUDGES;
-                case "Lamentations": return Book.LAMENTATIONS;
-                case "Leviticus": return Book.LEVITICUS;
-                case "Luke": return Book.LUKE;
-                case "Malachi": return Book.MALACHI;
-                case "Mark": return Book.MARK;
-                case "Matthew": return Book.MATTHEW;
-                case "Micah": return Book.MICAH;
-                case "Nahum": return Book.NAHUM;
-                case "Nehemiah": return Book.NEHEMIAH;
-                case "Numbers": return Book.NUMBERS;
-                case "Obadiah": return Book.OBADIAH;
-                case "Philemon": return Book.PHILEMON;
-                case "Philippians": return Book.PHILIPPIANS;
-                case "Proverbs": return Book.PROVERBS;
-                case "Psalms": return Book.PSALMS;
-                case "Revelation": return Book.REVELATION;
-                case "Romans": return Book.ROMANS;
-                case "Ruth": return Book.RUTH;
-                case "Song of Solomon": return Book.SONG_OF_SOLOMON;
-                case "Titus": return Book.TITUS;
-                case "Zechariah": return Book.ZECHARIAH;
-                case "Zephaniah": return Book.ZEPHANIAH;
-                default: return null;
-            }
+                "1 Chronicles" => Book.CHRONICLES1,
+                "1 Corinthians" => Book.CORINTHIANS1,
+                "1 John" => Book.JOHN1,
+                "1 Kings" => Book.KINGS1,
+                "1 Peter" => Book.PETER1,
+                "1 Samuel" => Book.SAMUEL1,
+                "1 Thessalonians" => Book.THESSALONIANS1,
+                "1 Timothy" => Book.TIMOTHY1,
+                "2 Chronicles" => Book.CHRONICLES2,
+                "2 Corinthians" => Book.CORINTHIANS2,
+                "2 John" => Book.JOHN2,
+                "2 Kings" => Book.KINGS2,
+                "2 Peter" => Book.PETER2,
+                "2 Samuel" => Book.SAMUEL2,
+                "2 Thessalonians" => Book.THESSALONIANS2,
+                "2 Timothy" => Book.TIMOTHY2,
+                "3 John" => Book.JOHN3,
+                "Acts" => Book.ACTS,
+                "Amos" => Book.AMOS,
+                "Colossians" => Book.COLOSSIANS,
+                "Daniel" => Book.DANIEL,
+                "Deuteronomy" => Book.DEUTERONOMY,
+                "Ecclesiastes" => Book.ECCLESIASTES,
+                "Ephesians" => Book.EPHESIANS,
+                "Esther" => Book.ESTHER,
+                "Exodus" => Book.EXODUS,
+                "Ezekiel" => Book.EZEKIEL,
+                "Ezra" => Book.EZRA,
+                "Galatians" => Book.GALATIANS,
+                "Genesis" => Book.GENESIS,
+                "Habakkuk" => Book.HABAKKUK,
+                "Haggai" => Book.HAGGAI,
+                "Hebrews" => Book.HEBREWS,
+                "Hosea" => Book.HOSEA,
+                "Isaiah" => Book.ISAIAH,
+                "James" => Book.JAMES,
+                "Jeremiah" => Book.JEREMIAH,
+                "Job" => Book.JOB,
+                "Joel" => Book.JOEL,
+                "John" => Book.JOHN,
+                "Jonah" => Book.JONAH,
+                "Joshua" => Book.JOSHUA,
+                "Jude" => Book.JUDE,
+                "Judges" => Book.JUDGES,
+                "Lamentations" => Book.LAMENTATIONS,
+                "Leviticus" => Book.LEVITICUS,
+                "Luke" => Book.LUKE,
+                "Malachi" => Book.MALACHI,
+                "Mark" => Book.MARK,
+                "Matthew" => Book.MATTHEW,
+                "Micah" => Book.MICAH,
+                "Nahum" => Book.NAHUM,
+                "Nehemiah" => Book.NEHEMIAH,
+                "Numbers" => Book.NUMBERS,
+                "Obadiah" => Book.OBADIAH,
+                "Philemon" => Book.PHILEMON,
+                "Philippians" => Book.PHILIPPIANS,
+                "Proverbs" => Book.PROVERBS,
+                "Psalms" => Book.PSALMS,
+                "Revelation" => Book.REVELATION,
+                "Romans" => Book.ROMANS,
+                "Ruth" => Book.RUTH,
+                "Song of Solomon" => Book.SONG_OF_SOLOMON,
+                "Titus" => Book.TITUS,
+                "Zechariah" => Book.ZECHARIAH,
+                "Zephaniah" => Book.ZEPHANIAH,
+                _ => null,
+            };
         }
 
         internal static string ToString(Book book)
         {
-            switch (book)
+            return book switch
             {
-                case Book.CHRONICLES1: return "1 Chronicles";
-                case Book.CORINTHIANS1: return "1 Corinthians";
-                case Book.JOHN1: return "1 John";
-                case Book.KINGS1: return "1 Kings";
-                case Book.PETER1: return "1 Peter";
-                case Book.SAMUEL1: return "1 Samuel";
-                case Book.THESSALONIANS1: return "1 Thessalonians";
-                case Book.TIMOTHY1: return "1 Timothy";
-                case Book.CHRONICLES2: return "2 Chronicles";
-                case Book.CORINTHIANS2: return "2 Corinthians";
-                case Book.JOHN2: return "2 John";
-                case Book.KINGS2: return "2 Kings";
-                case Book.PETER2: return "2 Peter";
-                case Book.SAMUEL2: return "2 Samuel";
-                case Book.THESSALONIANS2: return "2 Thessalonians";
-                case Book.TIMOTHY2: return "2 Timothy";
-                case Book.JOHN3: return "3 John";
-                case Book.ACTS: return "Acts";
-                case Book.AMOS: return "Amos";
-                case Book.COLOSSIANS: return "Colossians";
-                case Book.DANIEL: return "Daniel";
-                case Book.DEUTERONOMY: return "Deuteronomy";
-                case Book.ECCLESIASTES: return "Ecclesiastes";
-                case Book.EPHESIANS: return "Ephesians";
-                case Book.ESTHER: return "Esther";
-                case Book.EXODUS: return "Exodus";
-                case Book.EZEKIEL: return "Ezekiel";
-                case Book.EZRA: return "Ezra";
-                case Book.GALATIANS: return "Galatians";
-                case Book.GENESIS: return "Genesis";
-                case Book.HABAKKUK: return "Habakkuk";
-                case Book.HAGGAI: return "Haggai";
-                case Book.HEBREWS: return "Hebrews";
-                case Book.HOSEA: return "Hosea";
-                case Book.ISAIAH: return "Isaiah";
-                case Book.JAMES: return "James";
-                case Book.JEREMIAH: return "Jeremiah";
-                case Book.JOB: return "Job";
-                case Book.JOEL: return "Joel";
-                case Book.JOHN: return "John";
-                case Book.JONAH: return "Jonah";
-                case Book.JOSHUA: return "Joshua";
-                case Book.JUDE: return "Jude";
-                case Book.JUDGES: return "Judges";
-                case Book.LAMENTATIONS: return "Lamentations";
-                case Book.LEVITICUS: return "Leviticus";
-                case Book.LUKE: return "Luke";
-                case Book.MALACHI: return "Malachi";
-                case Book.MARK: return "Mark";
-                case Book.MATTHEW: return "Matthew";
-                case Book.MICAH: return "Micah";
-                case Book.NAHUM: return "Nahum";
-                case Book.NEHEMIAH: return "Nehemiah";
-                case Book.NUMBERS: return "Numbers";
-                case Book.OBADIAH: return "Obadiah";
-                case Book.PHILEMON: return "Philemon";
-                case Book.PHILIPPIANS: return "Philippians";
-                case Book.PROVERBS: return "Proverbs";
-                case Book.PSALMS: return "Psalms";
-                case Book.REVELATION: return "Revelation";
-                case Book.ROMANS: return "Romans";
-                case Book.RUTH: return "Ruth";
-                case Book.SONG_OF_SOLOMON: return "Song of Solomon";
-                case Book.TITUS: return "Titus";
-                case Book.ZECHARIAH: return "Zechariah";
-                case Book.ZEPHANIAH: return "Zephaniah";
-                default: return null;
-            }
+                Book.CHRONICLES1 => "1 Chronicles",
+                Book.CORINTHIANS1 => "1 Corinthians",
+                Book.JOHN1 => "1 John",
+                Book.KINGS1 => "1 Kings",
+                Book.PETER1 => "1 Peter",
+                Book.SAMUEL1 => "1 Samuel",
+                Book.THESSALONIANS1 => "1 Thessalonians",
+                Book.TIMOTHY1 => "1 Timothy",
+                Book.CHRONICLES2 => "2 Chronicles",
+                Book.CORINTHIANS2 => "2 Corinthians",
+                Book.JOHN2 => "2 John",
+                Book.KINGS2 => "2 Kings",
+                Book.PETER2 => "2 Peter",
+                Book.SAMUEL2 => "2 Samuel",
+                Book.THESSALONIANS2 => "2 Thessalonians",
+                Book.TIMOTHY2 => "2 Timothy",
+                Book.JOHN3 => "3 John",
+                Book.ACTS => "Acts",
+                Book.AMOS => "Amos",
+                Book.COLOSSIANS => "Colossians",
+                Book.DANIEL => "Daniel",
+                Book.DEUTERONOMY => "Deuteronomy",
+                Book.ECCLESIASTES => "Ecclesiastes",
+                Book.EPHESIANS => "Ephesians",
+                Book.ESTHER => "Esther",
+                Book.EXODUS => "Exodus",
+                Book.EZEKIEL => "Ezekiel",
+                Book.EZRA => "Ezra",
+                Book.GALATIANS => "Galatians",
+                Book.GENESIS => "Genesis",
+                Book.HABAKKUK => "Habakkuk",
+                Book.HAGGAI => "Haggai",
+                Book.HEBREWS => "Hebrews",
+                Book.HOSEA => "Hosea",
+                Book.ISAIAH => "Isaiah",
+                Book.JAMES => "James",
+                Book.JEREMIAH => "Jeremiah",
+                Book.JOB => "Job",
+                Book.JOEL => "Joel",
+                Book.JOHN => "John",
+                Book.JONAH => "Jonah",
+                Book.JOSHUA => "Joshua",
+                Book.JUDE => "Jude",
+                Book.JUDGES => "Judges",
+                Book.LAMENTATIONS => "Lamentations",
+                Book.LEVITICUS => "Leviticus",
+                Book.LUKE => "Luke",
+                Book.MALACHI => "Malachi",
+                Book.MARK => "Mark",
+                Book.MATTHEW => "Matthew",
+                Book.MICAH => "Micah",
+                Book.NAHUM => "Nahum",
+                Book.NEHEMIAH => "Nehemiah",
+                Book.NUMBERS => "Numbers",
+                Book.OBADIAH => "Obadiah",
+                Book.PHILEMON => "Philemon",
+                Book.PHILIPPIANS => "Philippians",
+                Book.PROVERBS => "Proverbs",
+                Book.PSALMS => "Psalms",
+                Book.REVELATION => "Revelation",
+                Book.ROMANS => "Romans",
+                Book.RUTH => "Ruth",
+                Book.SONG_OF_SOLOMON => "Song of Solomon",
+                Book.TITUS => "Titus",
+                Book.ZECHARIAH => "Zechariah",
+                Book.ZEPHANIAH => "Zephaniah",
+                _ => null,
+            };
         }
     }
 

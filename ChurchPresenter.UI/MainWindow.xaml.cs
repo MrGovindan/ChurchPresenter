@@ -25,11 +25,11 @@ namespace ChurchPresenter.UI
 {
     public partial class MainWindow : Window, IMainWindow
     {
-        Panel previewPanel;
-        Panel livePanel;
+        private readonly Panel previewPanel;
+        private readonly Panel livePanel;
         private readonly IServiceModel serviceModel;
-        Panel libraryPanel;
-        Panel servicePanel;
+        private readonly Panel libraryPanel;
+        private readonly Panel servicePanel;
 
         public MainWindow(
             LibraryView libraryView,
@@ -104,14 +104,12 @@ namespace ChurchPresenter.UI
 
         private void ArrangeForLive()
         {
-            var cd = new ColumnDefinition();
-            cd.Width = new GridLength(0);
+            var cd = new ColumnDefinition { Width = new GridLength(0) };
             MainGrid.ColumnDefinitions[0] = cd;
             LeftPanel.Children.Remove(libraryPanel);
             LeftSplitter.IsEnabled = false;
 
-            cd = new ColumnDefinition();
-            cd.Width = new GridLength(0);
+            cd = new ColumnDefinition { Width = new GridLength(0) };
             CenterPanel.ColumnDefinitions[0] = cd;
             CenterPanel.Children.Remove(previewPanel);
 
@@ -124,15 +122,12 @@ namespace ChurchPresenter.UI
 
         private void ArrangeForSetup()
         {
-            var cd = new ColumnDefinition();
-            cd.Width = new GridLength(1, GridUnitType.Auto);
-            cd.MinWidth = 200;
+            var cd = new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto), MinWidth = 200 };
             MainGrid.ColumnDefinitions[0] = cd;
             LeftPanel.Children.Add(libraryPanel);
             LeftSplitter.IsEnabled = true;
 
-            cd = new ColumnDefinition();
-            cd.Width = new GridLength(1, GridUnitType.Star);
+            cd = new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) };
             CenterPanel.ColumnDefinitions[0] = cd;
             CenterPanel.Children.Add(previewPanel);
 

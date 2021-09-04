@@ -4,7 +4,6 @@ using ChurchPresenter.UI.Models.Folder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ChurchPresenter.UI.Presenters
@@ -24,12 +23,12 @@ namespace ChurchPresenter.UI.Presenters
 
     partial class BibleLibraryPresenter
     {
-        private static Regex searchPattern = new Regex(@"((\d?)\s?([a-z]+))\s?(\d+)(:(\d+)(-(\d+))?)?");
+        private static readonly Regex searchPattern = new Regex(@"((\d?)\s?([a-z]+))\s?(\d+)(:(\d+)(-(\d+))?)?");
 
-        private IBibleLibraryView view;
-        private IBibleModel model;
-        private IServiceModel serviceModel;
-        private ISelectedFolderModel previewFolderModel;
+        private readonly IBibleLibraryView view;
+        private readonly IBibleModel model;
+        private readonly IServiceModel serviceModel;
+        private readonly ISelectedFolderModel previewFolderModel;
         private ScriptureCollection scriptures;
 
         public BibleLibraryPresenter(
@@ -113,7 +112,7 @@ namespace ChurchPresenter.UI.Presenters
             var list = new List<string>();
             var book = BookHelper.ToString(scriptures.start.book);
             for (int i = scriptures.start.verse; i <= scriptures.end.verse; i++)
-                list.Add(String.Format("{0} {1}:{2} ({3})", book, scriptures.start.chapter, i, scriptures.version));
+                list.Add(string.Format("{0} {1}:{2} ({3})", book, scriptures.start.chapter, i, scriptures.version));
             view.ShowScriptures(list.ToArray());
         }
 
@@ -132,12 +131,16 @@ namespace ChurchPresenter.UI.Presenters
             var folder = new ScriptureFolder();
             var verseSeriesDescription = GetVerseSeriesFromSelection(currentSelection);
             folder.title = string.Format("{0} {1}:{2} {3}", BookHelper.ToString(scriptures.start.book), scriptures.start.chapter, verseSeriesDescription, scriptures.version);
-            var previousIndex = currentSelection[0];
             foreach (var i in currentSelection)
-                folder.slides.Add(new ScriptureSlide(
-                    scriptures.verses[i],
-                    scriptures.version,
-                    new Verse(scriptures.start.book, scriptures.start.chapter, scriptures.start.verse + i)));
+            {
+                var parts = new List<TextPart>
+                {
+                    TextPart.AsSuperscript(string.Format("{0}:{1}", scriptures.start.chapter, scriptures.start.verse + i)),
+                    TextPart.AsNormal(scriptures.verses[i])
+                };
+                var caption = string.Format("{0} {1}:{2} {3}", BookHelper.ToString(scriptures.start.book), scriptures.start.chapter, scriptures.start.verse + i, scriptures.version);
+                folder.slides.Add(new Slide(parts, caption));
+            }
 
             processFolder.Invoke(folder);
         }

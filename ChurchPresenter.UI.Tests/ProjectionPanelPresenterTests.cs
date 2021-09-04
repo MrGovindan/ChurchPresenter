@@ -34,10 +34,14 @@ namespace ChurchPresenter.UI.Tests
             var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Act
+            string[] slides = null;
+            fixture.view.When(v => v.SetSlides(Arg.Any<string[]>())).Do(arg => slides = arg.Arg<string[]>());
             fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
-            fixture.view.Received().SetSlides(Arg.Any<Slide[]>());
+            Assert.That(slides.Length, Is.EqualTo(2));
+            Assert.That(slides[0], Is.EqualTo("Slide 1 Test Text"));
+            Assert.That(slides[1], Is.EqualTo("Foo Bar Baz"));
         }
 
         [Test]
