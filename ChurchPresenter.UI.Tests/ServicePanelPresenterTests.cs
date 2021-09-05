@@ -42,7 +42,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.FolderActivated += Raise.Event<Action>();
 
             // Assert
-            fixture.selectedFolderModel.Received().PublishSelectedFolder(testFolder2);
+            fixture.selectedFolderService.Received().SelectFolder(testFolder2);
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.FolderSelected += Raise.Event<Action<int>>(1);
 
             // Assert
-            fixture.selectedFolderModel.Received(0).PublishSelectedFolder(Arg.Any<IFolder>());
+            fixture.selectedFolderService.Received(0).SelectFolder(Arg.Any<IFolder>());
         }
 
         [Test]
@@ -305,18 +305,18 @@ namespace ChurchPresenter.UI.Tests
             public readonly ServicePanelPresenter sut;
             public readonly IServicePanelView view;
             public readonly IServiceModel serviceModel;
-            public readonly ISelectedFolderModel selectedFolderModel;
+            public readonly ISelectedFolderService selectedFolderService;
 
             public ServicePanelPresenterTestFixture(
                 ServicePanelPresenter sut,
                 IServicePanelView view,
                 IServiceModel model,
-                ISelectedFolderModel selectedFolderModel)
+                ISelectedFolderService selectedFolderService)
             {
                 this.sut = sut;
                 this.view = view;
                 this.serviceModel = model;
-                this.selectedFolderModel = selectedFolderModel;
+                this.selectedFolderService = selectedFolderService;
             }
         }
 
@@ -324,9 +324,9 @@ namespace ChurchPresenter.UI.Tests
         {
             var serviceModel = new ServiceModel();
             var view = Substitute.For<IServicePanelView>();
-            var selectedFolderModel = Substitute.For<ISelectedFolderModel>();
-            var sut = new ServicePanelPresenter(view, serviceModel, selectedFolderModel);
-            return new ServicePanelPresenterTestFixture(sut, view, serviceModel, selectedFolderModel);
+            var selectedFolderService = Substitute.For<ISelectedFolderService>();
+            var sut = new ServicePanelPresenter(view, serviceModel, selectedFolderService);
+            return new ServicePanelPresenterTestFixture(sut, view, serviceModel, selectedFolderService);
         }
     }
 }

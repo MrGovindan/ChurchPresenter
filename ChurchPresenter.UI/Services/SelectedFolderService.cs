@@ -6,16 +6,16 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Services
 {
-    class SelectedFolderModel : ISelectedFolderModel
+    class SelectedFolderService : ISelectedFolderService
     {
         public event Action<IFolder> SelectedFolderChanged;
 
-        public SelectedFolderModel()
+        public SelectedFolderService()
         {
             Debug.WriteLine("SongSelectedPublisher created");
         }
 
-        public void PublishSelectedFolder(IFolder song)
+        public void SelectFolder(IFolder song)
         {
             SelectedFolderChanged?.Invoke(song);
         }

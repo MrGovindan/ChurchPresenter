@@ -30,13 +30,13 @@ namespace ChurchPresenter.UI.Presenters
     {
         private IServicePanelView view;
         private IServiceModel model;
-        private ISelectedFolderModel selectedFolderModel;
+        private ISelectedFolderService selectedFolderModel;
         private int selectedIndex;
 
         public ServicePanelPresenter(
             IServicePanelView view,
             IServiceModel model,
-            [KeyFilter("Live")] ISelectedFolderModel selectedFolderModel)
+            [KeyFilter("Live")] ISelectedFolderService selectedFolderModel)
         {
             this.view = view;
             this.model = model;
@@ -47,7 +47,7 @@ namespace ChurchPresenter.UI.Presenters
             model.ServiceCleared += () => view.ClearFolders();
 
             view.FolderSelected += HandleFolderSelected;
-            view.FolderActivated += () => selectedFolderModel.PublishSelectedFolder(model.ItemAt(selectedIndex));
+            view.FolderActivated += () => selectedFolderModel.SelectFolder(model.ItemAt(selectedIndex));
             view.FolderRemoved += HandleSongRemoved;
 
             view.FolderShitedUp += HandleFolderShiftedUp;

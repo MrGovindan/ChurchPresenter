@@ -5,9 +5,9 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Services
 {
-    public interface ISelectedFolderModel
+    public interface ISelectedFolderService
     {
         event Action<IFolder> SelectedFolderChanged;
-        void PublishSelectedFolder(IFolder song);
+        void SelectFolder(IFolder song);
     }
 }

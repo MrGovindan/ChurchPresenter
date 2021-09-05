@@ -161,7 +161,7 @@ namespace ChurchPresenter.UI.Tests
             var songLibrary = Substitute.For<ISongLibrary>();
             songLibrary.GetAllSongs().Returns(songList);
             var view = Substitute.For<ISongLibraryView>();
-            var publisher = Substitute.For<ISelectedFolderModel>();
+            var publisher = Substitute.For<ISelectedFolderService>();
             var presenter = CreateSut(view, songLibrary, publisher);
 
             // Act
@@ -169,7 +169,7 @@ namespace ChurchPresenter.UI.Tests
             view.SelectedSongChanged += Raise.Event<Action<int>>(1);
 
             // Assert
-            publisher.Received().PublishSelectedFolder(songList[1]);
+            publisher.Received().SelectFolder(songList[1]);
         }
         
         [Test]
@@ -195,15 +195,15 @@ namespace ChurchPresenter.UI.Tests
         private static SongLibraryPresenter CreateSut(
             ISongLibraryView view,
             ISongLibrary songLibrary,
-            ISelectedFolderModel selectedSongPublisher = null,
+            ISelectedFolderService selectedFolderService = null,
             IServiceModel serviceModel = null)
         {
-            if (selectedSongPublisher == null)
-                selectedSongPublisher = Substitute.For<ISelectedFolderModel>();
+            if (selectedFolderService == null)
+                selectedFolderService = Substitute.For<ISelectedFolderService>();
             if (serviceModel == null)
                 serviceModel = Substitute.For<IServiceModel>();
 
-            return new SongLibraryPresenter(view, songLibrary, selectedSongPublisher, serviceModel);
+            return new SongLibraryPresenter(view, songLibrary, selectedFolderService, serviceModel);
         }
 
         private static IList<LyricFolder> CreateSongListFromTitles(params string[] titles)

@@ -300,7 +300,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.model.GetWholeChapter(Arg.Any<int>(), Arg.Any<Book>(), Arg.Any<int>()).Returns(scriptures);
 
             IFolder addedFolder = null;
-            fixture.previewFolderModel.When(m => m.PublishSelectedFolder(Arg.Any<IFolder>())).Do(arg => addedFolder = arg.Arg<IFolder>());
+            fixture.previewFolderModel.When(m => m.SelectFolder(Arg.Any<IFolder>())).Do(arg => addedFolder = arg.Arg<IFolder>());
 
             fixture.view.SearchStarted += Raise.Event<Action<string, int>>("j4", 1);
 
@@ -317,7 +317,7 @@ namespace ChurchPresenter.UI.Tests
         {
             public IBibleModel model;
             public IBibleLibraryView view;
-            public ISelectedFolderModel previewFolderModel;
+            public ISelectedFolderService previewFolderModel;
             public BibleLibraryPresenter sut;
             internal IServiceModel serviceModel;
         }
@@ -327,7 +327,7 @@ namespace ChurchPresenter.UI.Tests
             var fixture = new BibleLibraryPresenterTestFixture();
             fixture.model = Substitute.For<IBibleModel>();
             fixture.view = Substitute.For<IBibleLibraryView>();
-            fixture.previewFolderModel = Substitute.For<ISelectedFolderModel>();
+            fixture.previewFolderModel = Substitute.For<ISelectedFolderService>();
             fixture.serviceModel = Substitute.For<IServiceModel>();
             fixture.sut = new BibleLibraryPresenter(fixture.view, fixture.model, fixture.serviceModel, fixture.previewFolderModel);
             return fixture;

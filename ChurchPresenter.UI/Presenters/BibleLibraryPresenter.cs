@@ -29,14 +29,14 @@ namespace ChurchPresenter.UI.Presenters
         private readonly IBibleLibraryView view;
         private readonly IBibleModel model;
         private readonly IServiceModel serviceModel;
-        private readonly ISelectedFolderModel previewFolderModel;
+        private readonly ISelectedFolderService previewFolderModel;
         private ScriptureCollection scriptures;
 
         public BibleLibraryPresenter(
             IBibleLibraryView view,
             IBibleModel model,
             IServiceModel serviceModel,
-            [KeyFilter("Preview")] ISelectedFolderModel previewFolderModel)
+            [KeyFilter("Preview")] ISelectedFolderService previewFolderModel)
         {
             this.view = view;
             this.model = model;
@@ -55,7 +55,6 @@ namespace ChurchPresenter.UI.Presenters
             if (search == "")
                 return;
 
-            search = search.ToLower();
             var results = BookHelper.FindMatchingBook(search).Select(b => b + " ");
             view.ShowSuggestions(results.ToArray());
         }
@@ -119,7 +118,7 @@ namespace ChurchPresenter.UI.Presenters
 
         private void HandleShowOnPreview(int[] currentSelection)
         {
-            GenerateFolderAndSendTo(currentSelection, folder => previewFolderModel.PublishSelectedFolder(folder));
+            GenerateFolderAndSendTo(currentSelection, folder => previewFolderModel.SelectFolder(folder));
         }
 
         private void HandleAddedToService(int[] currentSelection)

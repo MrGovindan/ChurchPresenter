@@ -21,7 +21,7 @@ namespace ChurchPresenter.UI.Tests
             var testFolder = new LyricFolderBuilder().WithTitle("Bombastic").WithLyrics(testLyrics).Build();
 
             // Act
-            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
+            fixture.selectedFolderService.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
             fixture.view.Received().SetTitle("Bombastic");
@@ -37,7 +37,7 @@ namespace ChurchPresenter.UI.Tests
             // Act
             string[] slides = null;
             fixture.view.When(v => v.SetSlides(Arg.Any<string[]>())).Do(arg => slides = arg.Arg<string[]>());
-            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
+            fixture.selectedFolderService.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
             Assert.That(slides.Length, Is.EqualTo(2));
@@ -53,7 +53,7 @@ namespace ChurchPresenter.UI.Tests
             var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
 
             // Act
-            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
+            fixture.selectedFolderService.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
             fixture.displayedSlideService.Received().DisplaySlide(testFolder.GetSlides()[0]);
@@ -65,7 +65,7 @@ namespace ChurchPresenter.UI.Tests
             // Arrange
             var fixture = CreateFixture();
             var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
-            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
+            fixture.selectedFolderService.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Act
             fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testFolder.GetSlides()[1]);
@@ -93,7 +93,7 @@ namespace ChurchPresenter.UI.Tests
             // Arrange
             var fixture = CreateFixture();
             var testFolder = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
-            fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
+            fixture.selectedFolderService.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Act
             fixture.view.SlideSelected += Raise.Event<Action<int>>(1);
@@ -105,7 +105,7 @@ namespace ChurchPresenter.UI.Tests
         struct PreviewPanelPresenterTestsFixture
         {
             public IDisplayedSlideService displayedSlideService;
-            public ISelectedFolderModel selectedFolderPublisher;
+            public ISelectedFolderService selectedFolderService;
             public IProjectionView view;
             public ProjectionPanelPresenter sut;
         }
@@ -114,9 +114,9 @@ namespace ChurchPresenter.UI.Tests
         {
             var fixture = new PreviewPanelPresenterTestsFixture();
             fixture.displayedSlideService = Substitute.For<IDisplayedSlideService>();
-            fixture.selectedFolderPublisher = Substitute.For<ISelectedFolderModel>();
+            fixture.selectedFolderService = Substitute.For<ISelectedFolderService>();
             fixture.view = Substitute.For<IProjectionView>();
-            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedFolderPublisher, fixture.displayedSlideService);
+            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedFolderService, fixture.displayedSlideService);
             return fixture;
         }
     }

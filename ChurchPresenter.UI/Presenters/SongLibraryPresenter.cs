@@ -38,7 +38,7 @@ namespace ChurchPresenter.UI.Presenters
         public SongLibraryPresenter(
             ISongLibraryView view,
             ISongLibrary songLibrary,
-            [KeyFilter("Preview")] ISelectedFolderModel selectedSongPublisher,
+            [KeyFilter("Preview")] ISelectedFolderService selectedSongPublisher,
             IServiceModel serviceModel)
         {
             this.view = view;
@@ -46,7 +46,7 @@ namespace ChurchPresenter.UI.Presenters
 
             view.OnLoaded += async () => await HandleViewLoaded();
             view.SearchStringChanged += async (searchString) => await HandleNewSearchString(searchString);
-            view.SelectedSongChanged += index => selectedSongPublisher.PublishSelectedFolder(currentSongList[index]);
+            view.SelectedSongChanged += index => selectedSongPublisher.SelectFolder(currentSongList[index]);
             view.SongAddedToService += index => serviceModel.AddFolder(currentSongList[index]);
         }
 

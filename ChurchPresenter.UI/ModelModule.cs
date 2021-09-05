@@ -17,8 +17,8 @@ namespace ChurchPresenter.UI
         {
             builder.RegisterType<SongLibrary>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<BibleLibrary>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<SelectedFolderModel>().Keyed<ISelectedFolderModel>("Preview").SingleInstance();
-            builder.RegisterType<SelectedFolderModel>().Keyed<ISelectedFolderModel>("Live").SingleInstance();
+            builder.RegisterType<SelectedFolderService>().Keyed<ISelectedFolderService>("Preview").SingleInstance();
+            builder.RegisterType<SelectedFolderService>().Keyed<ISelectedFolderService>("Live").SingleInstance();
             builder.RegisterType<DisplayedSlideService>().Keyed<IDisplayedSlideService>("Preview").SingleInstance();
             builder.RegisterType<DisplayedSlideService>().Keyed<IDisplayedSlideService>("Live").SingleInstance();
             builder.RegisterType<SlideVisibilityModel>().As<ISlideVisibilityModel>().SingleInstance();

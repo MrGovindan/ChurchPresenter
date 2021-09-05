@@ -24,7 +24,7 @@ namespace ChurchPresenter.UI.Presenters
 
         public SlideControlButtonsPresenter(
             ISlideControlButtonsView view,
-            ISelectedFolderModel selectedSongPublisher,
+            ISelectedFolderService selectedSongPublisher,
             IDisplayedSlideService selectedSlidePublisher)
         {
             this.view = view;
@@ -69,7 +69,7 @@ namespace ChurchPresenter.UI.Presenters
     {
         public LiveSlideControlButtonsPresenter(
             ILiveSlideControlButtonsView view,
-            [KeyFilter("Live")] ISelectedFolderModel selectedSongPublisher,
+            [KeyFilter("Live")] ISelectedFolderService selectedSongPublisher,
             [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
             ISlideVisibilityModel visibilityModel) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
@@ -93,13 +93,13 @@ namespace ChurchPresenter.UI.Presenters
     {
         public PreviewSlideControlButtonsPresenter(
             IPreviewSlideControlButtonsView view,
-            [KeyFilter("Preview")] ISelectedFolderModel selectedSongPublisher,
+            [KeyFilter("Preview")] ISelectedFolderService selectedSongPublisher,
             [KeyFilter("Preview")] IDisplayedSlideService selectedSlidePublisher,
             IServiceModel serviceModel,
-            [KeyFilter("Live")] ISelectedFolderModel liveSongSelectionPublisher) : base(view, selectedSongPublisher, selectedSlidePublisher)
+            [KeyFilter("Live")] ISelectedFolderService liveSongSelectionPublisher) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
             view.SongAddedToService += () => serviceModel.AddFolder(selectedSong);
-            view.SongShownOnLive += () => liveSongSelectionPublisher.PublishSelectedFolder(selectedSong);
+            view.SongShownOnLive += () => liveSongSelectionPublisher.SelectFolder(selectedSong);
         }
     }
 }

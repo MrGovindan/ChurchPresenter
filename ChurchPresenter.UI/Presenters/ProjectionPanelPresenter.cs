@@ -23,7 +23,7 @@ namespace ChurchPresenter.UI.Presenters
     {
         public LivePanelPresenter(
             [KeyFilter("Live")] IProjectionView view,
-            [KeyFilter("Live")] ISelectedFolderModel selectedFolderModel,
+            [KeyFilter("Live")] ISelectedFolderService selectedFolderModel,
             [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
             ISlideVisibilityModel slideVisibilityPublisher)
             : base(view, selectedFolderModel, selectedSlidePublisher)
@@ -36,7 +36,7 @@ namespace ChurchPresenter.UI.Presenters
     {
         public PreviewPanelPresenter(
             [KeyFilter("Preview")] IProjectionView view,
-            [KeyFilter("Preview")] ISelectedFolderModel selectedFolderModel,
+            [KeyFilter("Preview")] ISelectedFolderService selectedFolderModel,
             [KeyFilter("Preview")] IDisplayedSlideService selectedSlidePublisher)
             : base(view, selectedFolderModel, selectedSlidePublisher)
         {
@@ -51,7 +51,7 @@ namespace ChurchPresenter.UI.Presenters
 
         public ProjectionPanelPresenter(
             IProjectionView view,
-            ISelectedFolderModel selectedFolderModel,
+            ISelectedFolderService selectedFolderModel,
             IDisplayedSlideService selectedSlidePublisher)
         {
             this.view = view;
