@@ -13,7 +13,7 @@ namespace ChurchPresenter.UI.Models
         readonly JObject blankSlide = new JObject();
 
         public WebBrowserProjector(
-            [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
+            [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
             ISlideVisibilityModel slideVisibilityPublisher,
             ISlideEncoder slideEncoder,
             IWriter<string> output)
@@ -23,7 +23,7 @@ namespace ChurchPresenter.UI.Models
 
             server = output;
 
-            selectedSlidePublisher.SelectedSlideChanged += slide =>
+            selectedSlidePublisher.DisplayedSlideChanged += slide =>
             {
                 var json = new JObject { ["text"] = slideEncoder.Encode(slide), ["caption"] = slide.GetCaption() };
                 currentSlide = json.ToString();

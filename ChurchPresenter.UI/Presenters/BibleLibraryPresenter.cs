@@ -1,6 +1,7 @@
 ﻿using Autofac.Features.AttributeFilters;
 using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Models.Folder;
+using ChurchPresenter.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

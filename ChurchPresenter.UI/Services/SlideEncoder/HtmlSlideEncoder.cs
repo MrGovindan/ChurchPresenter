@@ -1,7 +1,4 @@
 ﻿using ChurchPresenter.UI.Models.Folder;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Web;
 
 namespace ChurchPresenter.UI.Services.SlideEncoder

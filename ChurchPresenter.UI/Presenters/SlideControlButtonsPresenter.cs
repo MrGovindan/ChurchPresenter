@@ -1,6 +1,7 @@
 ﻿using Autofac.Features.AttributeFilters;
 using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Models.Folder;
+using ChurchPresenter.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,18 +25,18 @@ namespace ChurchPresenter.UI.Presenters
         public SlideControlButtonsPresenter(
             ISlideControlButtonsView view,
             ISelectedFolderModel selectedSongPublisher,
-            ISelectedSliderPublisher selectedSlidePublisher)
+            IDisplayedSlideService selectedSlidePublisher)
         {
             this.view = view;
 
             view.SetPreviousSlideButtonEnabled(false);
             view.SetNextSlideButtonEnabled(false);
 
-            view.GoToNextSlide += () => selectedSlidePublisher.PublishSelectedSlide(selectedSong.GetSlides()[++currentSlideIndex]);
-            view.GoToPreviousSlide += () => selectedSlidePublisher.PublishSelectedSlide(selectedSong.GetSlides()[--currentSlideIndex]);
+            view.GoToNextSlide += () => selectedSlidePublisher.DisplaySlide(selectedSong.GetSlides()[++currentSlideIndex]);
+            view.GoToPreviousSlide += () => selectedSlidePublisher.DisplaySlide(selectedSong.GetSlides()[--currentSlideIndex]);
 
             selectedSongPublisher.SelectedFolderChanged += HandleSongChanged;
-            selectedSlidePublisher.SelectedSlideChanged += HandleSlideChanged;
+            selectedSlidePublisher.DisplayedSlideChanged += HandleSlideChanged;
         }
 
         private void HandleSongChanged(IFolder selectedSong)
@@ -69,7 +70,7 @@ namespace ChurchPresenter.UI.Presenters
         public LiveSlideControlButtonsPresenter(
             ILiveSlideControlButtonsView view,
             [KeyFilter("Live")] ISelectedFolderModel selectedSongPublisher,
-            [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
+            [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
             ISlideVisibilityModel visibilityModel) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
             visibilityModel.SlideVisibilityChanged += visible =>
@@ -93,7 +94,7 @@ namespace ChurchPresenter.UI.Presenters
         public PreviewSlideControlButtonsPresenter(
             IPreviewSlideControlButtonsView view,
             [KeyFilter("Preview")] ISelectedFolderModel selectedSongPublisher,
-            [KeyFilter("Preview")] ISelectedSliderPublisher selectedSlidePublisher,
+            [KeyFilter("Preview")] IDisplayedSlideService selectedSlidePublisher,
             IServiceModel serviceModel,
             [KeyFilter("Live")] ISelectedFolderModel liveSongSelectionPublisher) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {

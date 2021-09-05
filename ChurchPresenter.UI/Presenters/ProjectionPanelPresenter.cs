@@ -1,10 +1,10 @@
 ﻿using Autofac.Features.AttributeFilters;
 using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Models.Folder;
+using ChurchPresenter.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ChurchPresenter.UI.Presenters
 {
@@ -24,7 +24,7 @@ namespace ChurchPresenter.UI.Presenters
         public LivePanelPresenter(
             [KeyFilter("Live")] IProjectionView view,
             [KeyFilter("Live")] ISelectedFolderModel selectedFolderModel,
-            [KeyFilter("Live")] ISelectedSliderPublisher selectedSlidePublisher,
+            [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
             ISlideVisibilityModel slideVisibilityPublisher)
             : base(view, selectedFolderModel, selectedSlidePublisher)
         {
@@ -37,7 +37,7 @@ namespace ChurchPresenter.UI.Presenters
         public PreviewPanelPresenter(
             [KeyFilter("Preview")] IProjectionView view,
             [KeyFilter("Preview")] ISelectedFolderModel selectedFolderModel,
-            [KeyFilter("Preview")] ISelectedSliderPublisher selectedSlidePublisher)
+            [KeyFilter("Preview")] IDisplayedSlideService selectedSlidePublisher)
             : base(view, selectedFolderModel, selectedSlidePublisher)
         {
         }
@@ -46,20 +46,20 @@ namespace ChurchPresenter.UI.Presenters
     class ProjectionPanelPresenter
     {
         private readonly IProjectionView view;
-        private readonly ISelectedSliderPublisher selectedSlidePublisher;
+        private readonly IDisplayedSlideService selectedSlidePublisher;
         private IFolder currentFolder;
 
         public ProjectionPanelPresenter(
             IProjectionView view,
             ISelectedFolderModel selectedFolderModel,
-            ISelectedSliderPublisher selectedSlidePublisher)
+            IDisplayedSlideService selectedSlidePublisher)
         {
             this.view = view;
             this.selectedSlidePublisher = selectedSlidePublisher;
 
             selectedFolderModel.SelectedFolderChanged += HandleFolderSelected;
-            view.SlideSelected += index => selectedSlidePublisher.PublishSelectedSlide(currentFolder.GetSlides()[index]);
-            selectedSlidePublisher.SelectedSlideChanged += HandleSlideSeleted;
+            view.SlideSelected += index => selectedSlidePublisher.DisplaySlide(currentFolder.GetSlides()[index]);
+            selectedSlidePublisher.DisplayedSlideChanged += HandleSlideSeleted;
         }
 
 
@@ -68,7 +68,7 @@ namespace ChurchPresenter.UI.Presenters
             currentFolder = folder;
             view.SetTitle(folder.GetTitle());
             view.SetSlides(folder.GetSlides().Select(s => string.Join(" ", s.GetParts().Select(p => p.Text))).ToArray());
-            selectedSlidePublisher.PublishSelectedSlide(folder.GetSlides()[0]);
+            selectedSlidePublisher.DisplaySlide(folder.GetSlides()[0]);
         }
 
         private void HandleSlideSeleted(Slide selectedSlide)

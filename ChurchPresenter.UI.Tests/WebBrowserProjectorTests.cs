@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using System;
+using System.Linq;
 
 namespace ChurchPresenter.UI.Tests
 {
@@ -23,7 +24,7 @@ namespace ChurchPresenter.UI.Tests
             expectedJson["caption"] = "caption 0";
 
             // Act
-            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
+            fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
 
             // Assert
             fixture.outputWriter.Received().Write(Arg.Is(expectedJson.ToString()));
@@ -39,7 +40,7 @@ namespace ChurchPresenter.UI.Tests
             expectedJson["text"] = "";
             expectedJson["caption"] = "";
 
-            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
+            fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
 
             // Act
             fixture.slideVisibilityModel.SlideVisibilityChanged += Raise.Event<Action<bool>>(false);
@@ -59,7 +60,7 @@ namespace ChurchPresenter.UI.Tests
             expectedJson["caption"] = "";
 
             fixture.slideVisibilityModel.SlideVisibilityChanged += Raise.Event<Action<bool>>(false);
-            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
+            fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
 
             // Act
             fixture.slideVisibilityModel.SlideVisibilityChanged += Raise.Event<Action<bool>>(true);
@@ -72,17 +73,13 @@ namespace ChurchPresenter.UI.Tests
         {
             public string Encode(Slide slide)
             {
-                var result = "";
-                foreach (var part in slide.GetParts())
-                    result += part.Text;
-
-                return result;
+                return string.Join(" ", slide.GetParts().Select(p => p.Text));
             }
         }
 
         struct WebBrowserProjectorTestFixture
         {
-            internal ISelectedSliderPublisher selectedSlidePublisher;
+            internal IDisplayedSlideService displayedSlideService;
             internal ISlideVisibilityModel slideVisibilityModel;
             internal IWriter<string> outputWriter;
             internal WebBrowserProjector sut;
@@ -91,10 +88,10 @@ namespace ChurchPresenter.UI.Tests
         private WebBrowserProjectorTestFixture CreateTestFixture()
         {
             var fixture = new WebBrowserProjectorTestFixture();
-            fixture.selectedSlidePublisher = Substitute.For<ISelectedSliderPublisher>();
+            fixture.displayedSlideService = Substitute.For<IDisplayedSlideService>();
             fixture.slideVisibilityModel = Substitute.For<ISlideVisibilityModel>();
             fixture.outputWriter = Substitute.For<IWriter<string>>();
-            fixture.sut = new WebBrowserProjector(fixture.selectedSlidePublisher, fixture.slideVisibilityModel, new BasicSlideEncoder(), fixture.outputWriter);
+            fixture.sut = new WebBrowserProjector(fixture.displayedSlideService, fixture.slideVisibilityModel, new BasicSlideEncoder(), fixture.outputWriter);
             return fixture;
         }
     }

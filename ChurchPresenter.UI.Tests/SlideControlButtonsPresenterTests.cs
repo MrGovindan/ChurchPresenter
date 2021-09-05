@@ -1,6 +1,7 @@
 ﻿using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Models.Folder;
 using ChurchPresenter.UI.Presenters;
+using ChurchPresenter.UI.Services;
 using NSubstitute;
 using NUnit.Framework;
 using System;
@@ -47,7 +48,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedSongPublisher.PublishSelectedFolder(testSong);
 
             // Act
-            fixture.selectedSlidePublisher.PublishSelectedSlide(testSong.GetSlides()[0]);
+            fixture.displayedSlideService.DisplaySlide(testSong.GetSlides()[0]);
 
             // Assert
             fixture.view.Received(2).SetPreviousSlideButtonEnabled(false);
@@ -60,9 +61,9 @@ namespace ChurchPresenter.UI.Tests
             var fixture = CreateFixture();
             var testSong = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
             Slide currentSlide = new Slide("");
-            fixture.selectedSlidePublisher.SelectedSlideChanged += slide => currentSlide = slide;
+            fixture.displayedSlideService.DisplayedSlideChanged += slide => currentSlide = slide;
             fixture.selectedSongPublisher.PublishSelectedFolder(testSong);
-            fixture.selectedSlidePublisher.PublishSelectedSlide(testSong.GetSlides()[1]);
+            fixture.displayedSlideService.DisplaySlide(testSong.GetSlides()[1]);
 
             // Act
             fixture.view.GoToPreviousSlide += Raise.Event<Action>();
@@ -80,7 +81,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedSongPublisher.PublishSelectedFolder(testSong);
 
             // Act
-            fixture.selectedSlidePublisher.PublishSelectedSlide(testSong.GetSlides()[1]);
+            fixture.displayedSlideService.DisplaySlide(testSong.GetSlides()[1]);
 
             // Assert
             fixture.view.Received().SetPreviousSlideButtonEnabled(true);
@@ -96,7 +97,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedSongPublisher.PublishSelectedFolder(testSong);
 
             // Act
-            fixture.selectedSlidePublisher.PublishSelectedSlide(testSong.GetSlides()[2]);
+            fixture.displayedSlideService.DisplaySlide(testSong.GetSlides()[2]);
 
             // Assert
             fixture.view.Received(2).SetNextSlideButtonEnabled(false);
@@ -111,7 +112,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedSongPublisher.PublishSelectedFolder(testSong);
 
             // Act
-            fixture.selectedSlidePublisher.PublishSelectedSlide(testSong.GetSlides()[1]);
+            fixture.displayedSlideService.DisplaySlide(testSong.GetSlides()[1]);
 
             // Assert
             fixture.view.Received().SetPreviousSlideButtonEnabled(true);
@@ -124,7 +125,7 @@ namespace ChurchPresenter.UI.Tests
             var fixture = CreateFixture();
             var testSong = new LyricFolderBuilder().WithLyrics(testLyrics).Build();
             Slide currentSlide = new Slide("");
-            fixture.selectedSlidePublisher.SelectedSlideChanged += slide => currentSlide = slide;
+            fixture.displayedSlideService.DisplayedSlideChanged += slide => currentSlide = slide;
             fixture.selectedSongPublisher.PublishSelectedFolder(testSong);
 
             // Act
@@ -139,7 +140,7 @@ namespace ChurchPresenter.UI.Tests
         struct SlideControlButtonsPresenterTestFixture
         {
             public ISelectedFolderModel selectedSongPublisher;
-            internal ISelectedSliderPublisher selectedSlidePublisher;
+            internal IDisplayedSlideService displayedSlideService;
             internal SlideControlButtonsPresenter sut;
             internal ISlideControlButtonsView view;
         }
@@ -148,9 +149,9 @@ namespace ChurchPresenter.UI.Tests
         {
             var fixture = new SlideControlButtonsPresenterTestFixture();
             fixture.selectedSongPublisher = new SelectedFolderModel();
-            fixture.selectedSlidePublisher = new SelectedSlidePublisher();
+            fixture.displayedSlideService = new DisplayedSlideService();
             fixture.view = Substitute.For<ISlideControlButtonsView>();
-            fixture.sut = new SlideControlButtonsPresenter(fixture.view, fixture.selectedSongPublisher, fixture.selectedSlidePublisher);
+            fixture.sut = new SlideControlButtonsPresenter(fixture.view, fixture.selectedSongPublisher, fixture.displayedSlideService);
 
             return fixture;
         }
@@ -216,7 +217,7 @@ namespace ChurchPresenter.UI.Tests
         struct LiveSlideControlButtonsPresenterTestFixture
         {
             internal ISelectedFolderModel selectedSongPublisher;
-            internal ISelectedSliderPublisher selectedSlidePublisher;
+            internal IDisplayedSlideService displayedSlideService;
             internal StubLiveSlideControlButtonsView view;
             internal ISlideVisibilityModel visibilityModel;
             internal LiveSlideControlButtonsPresenter sut;
@@ -245,10 +246,10 @@ namespace ChurchPresenter.UI.Tests
         {
             var fixture = new LiveSlideControlButtonsPresenterTestFixture();
             fixture.selectedSongPublisher = new SelectedFolderModel();
-            fixture.selectedSlidePublisher = new SelectedSlidePublisher();
+            fixture.displayedSlideService = new DisplayedSlideService();
             fixture.view = new StubLiveSlideControlButtonsView();
             fixture.visibilityModel = new SlideVisibilityModel();
-            fixture.sut = new LiveSlideControlButtonsPresenter(fixture.view, fixture.selectedSongPublisher, fixture.selectedSlidePublisher, fixture.visibilityModel);
+            fixture.sut = new LiveSlideControlButtonsPresenter(fixture.view, fixture.selectedSongPublisher, fixture.displayedSlideService, fixture.visibilityModel);
 
             return fixture;
         }
@@ -305,7 +306,7 @@ namespace ChurchPresenter.UI.Tests
         {
             internal ISelectedFolderModel selectedSongPublisher;
             internal ISelectedFolderModel liveSongSelectionPublisher;
-            internal ISelectedSliderPublisher selectedSlidePublisher;
+            internal IDisplayedSlideService displayedSlideService;
             internal IPreviewSlideControlButtonsView view;
             internal IServiceModel serviceModel;
             internal PreviewSlideControlButtonsPresenter sut;
@@ -315,11 +316,11 @@ namespace ChurchPresenter.UI.Tests
         {
             var fixture = new PreviewSlideControlButtonsPresenterTestFixture();
             fixture.selectedSongPublisher = new SelectedFolderModel();
-            fixture.selectedSlidePublisher = new SelectedSlidePublisher();
+            fixture.displayedSlideService = new DisplayedSlideService();
             fixture.view = Substitute.For<IPreviewSlideControlButtonsView>();
             fixture.serviceModel = Substitute.For<IServiceModel>();
             fixture.liveSongSelectionPublisher = Substitute.For<ISelectedFolderModel>();
-            fixture.sut = new PreviewSlideControlButtonsPresenter(fixture.view, fixture.selectedSongPublisher, fixture.selectedSlidePublisher, fixture.serviceModel, fixture.liveSongSelectionPublisher);
+            fixture.sut = new PreviewSlideControlButtonsPresenter(fixture.view, fixture.selectedSongPublisher, fixture.displayedSlideService, fixture.serviceModel, fixture.liveSongSelectionPublisher);
 
             return fixture;
         }

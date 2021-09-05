@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace ChurchPresenter.UI.Models
+namespace ChurchPresenter.UI.Services
 {
     class SelectedFolderModel : ISelectedFolderModel
     {

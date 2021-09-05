@@ -15,9 +15,9 @@ namespace ChurchPresenter.UI.Tests
         public void ReadTestFile()
         {
             // Once off testing
-            testData = System.IO.File.ReadAllText("..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
+            // testData = System.IO.File.ReadAllText("..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
             // Live Unit Testing
-            // testData = System.IO.File.ReadAllText("..\\..\\..\\..\\..\\..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
+            testData = System.IO.File.ReadAllText("..\\..\\..\\..\\..\\..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
         }
 
         [Test]

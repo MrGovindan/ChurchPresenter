@@ -1,6 +1,7 @@
 ﻿using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Models.Folder;
 using ChurchPresenter.UI.Presenters;
+using ChurchPresenter.UI.Services;
 using NSubstitute;
 using NUnit.Framework;
 using System;
@@ -55,7 +56,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Assert
-            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testFolder.GetSlides()[0]);
+            fixture.displayedSlideService.Received().DisplaySlide(testFolder.GetSlides()[0]);
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedFolderPublisher.SelectedFolderChanged += Raise.Event<Action<IFolder>>(testFolder);
 
             // Act
-            fixture.selectedSlidePublisher.SelectedSlideChanged += Raise.Event<Action<Slide>>(testFolder.GetSlides()[1]);
+            fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testFolder.GetSlides()[1]);
 
             // Assert
             fixture.view.Received().SelectSlide(1);
@@ -98,12 +99,12 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.SlideSelected += Raise.Event<Action<int>>(1);
 
             // Assert
-            fixture.selectedSlidePublisher.Received().PublishSelectedSlide(testFolder.GetSlides()[1]);
+            fixture.displayedSlideService.Received().DisplaySlide(testFolder.GetSlides()[1]);
         }
 
         struct PreviewPanelPresenterTestsFixture
         {
-            public ISelectedSliderPublisher selectedSlidePublisher;
+            public IDisplayedSlideService displayedSlideService;
             public ISelectedFolderModel selectedFolderPublisher;
             public IProjectionView view;
             public ProjectionPanelPresenter sut;
@@ -112,10 +113,10 @@ namespace ChurchPresenter.UI.Tests
         private PreviewPanelPresenterTestsFixture CreateFixture()
         {
             var fixture = new PreviewPanelPresenterTestsFixture();
-            fixture.selectedSlidePublisher = Substitute.For<ISelectedSliderPublisher>();
+            fixture.displayedSlideService = Substitute.For<IDisplayedSlideService>();
             fixture.selectedFolderPublisher = Substitute.For<ISelectedFolderModel>();
             fixture.view = Substitute.For<IProjectionView>();
-            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedFolderPublisher, fixture.selectedSlidePublisher);
+            fixture.sut = new ProjectionPanelPresenter(fixture.view, fixture.selectedFolderPublisher, fixture.displayedSlideService);
             return fixture;
         }
     }
