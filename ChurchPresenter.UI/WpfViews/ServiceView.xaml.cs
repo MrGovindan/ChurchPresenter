@@ -25,6 +25,7 @@ namespace ChurchPresenter.UI.WpfViews
         public event Action FolderShitedDown;
         public event Action FolderMadeTopmost;
         public event Action FolderMadeBottommost;
+        public event Action ImportStarted;
 
         public ServiceView()
         {
@@ -33,6 +34,7 @@ namespace ChurchPresenter.UI.WpfViews
             ShiftDown.Click += (o, e) => FolderShitedDown?.Invoke();
             MakeFirst.Click += (o, e) => FolderMadeTopmost?.Invoke();
             MakeLast.Click += (o, e) => FolderMadeBottommost?.Invoke();
+            ImportService.Click += (o, e) => ImportStarted?.Invoke();
         }
 
         private int GetEntryIndex(ListItem entry) => ServiceList.Items.IndexOf(entry);

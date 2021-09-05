@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Features.AttributeFilters;
 using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Presenters;
@@ -21,6 +22,11 @@ namespace ChurchPresenter.UI
             builder.RegisterType<PreviewPanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<ServicePanelPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
             builder.RegisterType<LiveSlideControlButtonsPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
+            builder.RegisterType<ImportPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering().WithParameter("view", 
+                new ResolvedParameter(
+                    (p, c) => p.ParameterType == typeof(IImportView[]),
+                    (p, c) => new IImportView[] {c.Resolve<IMainWindow>(), c.Resolve<IServicePanelView>() }
+                ));
             builder.RegisterType<PreviewSlideControlButtonsPresenter>().SingleInstance().AutoActivate().WithAttributeFiltering();
         }
     }

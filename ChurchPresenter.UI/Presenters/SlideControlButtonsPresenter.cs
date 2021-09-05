@@ -71,15 +71,15 @@ namespace ChurchPresenter.UI.Presenters
             ILiveSlideControlButtonsView view,
             [KeyFilter("Live")] ISelectedFolderService selectedSongPublisher,
             [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
-            ISlideVisibilityModel visibilityModel) : base(view, selectedSongPublisher, selectedSlidePublisher)
+            ISlideVisibilityService slideVisibilityService) : base(view, selectedSongPublisher, selectedSlidePublisher)
         {
-            visibilityModel.SlideVisibilityChanged += visible =>
+            slideVisibilityService.SlideVisibilityChanged += visible =>
             {
                 view.SetHideSlideButtonEnabled(visible);
                 view.SetShowSlideButtonEnabled(!visible);
             };
-            view.SlideShown += () => visibilityModel.SetSlideVisible(true);
-            view.SlideHidden += () => visibilityModel.SetSlideVisible(false);
+            view.SlideShown += () => slideVisibilityService.SetSlideVisible(true);
+            view.SlideHidden += () => slideVisibilityService.SetSlideVisible(false);
         }
     }
 

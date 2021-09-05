@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    class SlideVisibilityModel : ISlideVisibilityModel
+    class SlideVisibilityService : ISlideVisibilityService
     {
         private bool visibility = false;
 

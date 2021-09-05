@@ -25,10 +25,10 @@ namespace ChurchPresenter.UI.Presenters
             [KeyFilter("Live")] IProjectionView view,
             [KeyFilter("Live")] ISelectedFolderService selectedFolderModel,
             [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
-            ISlideVisibilityModel slideVisibilityPublisher)
+            ISlideVisibilityService slideVisibilityService)
             : base(view, selectedFolderModel, selectedSlidePublisher)
         {
-            slideVisibilityPublisher.SlideVisibilityChanged += view.SetPreviewTextVisible;
+            slideVisibilityService.SlideVisibilityChanged += view.SetPreviewTextVisible;
         }
     }
 

@@ -1,15 +1,21 @@
-﻿using ChurchPresenter.UI.Models.Folder;
+﻿using ChurchPresenter.UI.Models;
+using ChurchPresenter.UI.Models.Folder;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace ChurchPresenter.UI.Models
+namespace ChurchPresenter.UI.Services.Import
 {
-    class OpenLpServiceParser
+    public interface IOpenLpServiceParser
     {
-        internal IFolder[] Parse(string serviceData)
+        IFolder[] Parse(string serviceData);
+    }
+
+    class OpenLpServiceParser : IOpenLpServiceParser
+    {
+        public IFolder[] Parse(string serviceData)
         {
             var folders = new List<IFolder>();
 

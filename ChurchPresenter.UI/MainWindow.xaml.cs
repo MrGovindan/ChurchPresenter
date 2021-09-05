@@ -1,25 +1,13 @@
-﻿using Autofac.Features.AttributeFilters;
-using ChurchPresenter.UI.Models;
+﻿using ChurchPresenter.UI.Models;
 using ChurchPresenter.UI.Presenters;
+using ChurchPresenter.UI.Services.Import;
 using ChurchPresenter.UI.WpfViews;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ChurchPresenter.UI
 {
@@ -30,6 +18,10 @@ namespace ChurchPresenter.UI
         private readonly IServiceModel serviceModel;
         private readonly Panel libraryPanel;
         private readonly Panel servicePanel;
+
+        public event Action LiveViewSelected;
+        public event Action SetupViewSelected;
+        public event Action ImportStarted;
 
         public MainWindow(
             LibraryView libraryView,
@@ -57,36 +49,8 @@ namespace ChurchPresenter.UI
 
             ShowLiveView.Click += (o, e) => LiveViewSelected?.Invoke();
             ShowSetupView.Click += (o, e) => SetupViewSelected?.Invoke();
-            Import.Click += HandleImport;
+            Import.Click += (o, e) => ImportStarted?.Invoke();
         }
-
-        private void HandleImport(object sender, RoutedEventArgs e)
-        {
-            var fd = new OpenFileDialog();
-            if (fd.ShowDialog() == true)
-            {
-                var fp = fd.FileNames[0];
-                var archive = ZipFile.Open(fp, ZipArchiveMode.Read);
-                var stream = archive.Entries[0].Open();
-                var reader = new StreamReader(stream);
-                var text = reader.ReadToEnd();
-                var parser = new OpenLpServiceParser();
-                try
-                {
-                    serviceModel.ClearService();
-
-                    var serviceItems = parser.Parse(text);
-                    foreach (var item in serviceItems)
-                        serviceModel.AddFolder(item);
-                }
-                catch (Exception)
-                {
-                }
-            }
-        }
-
-        public event Action LiveViewSelected;
-        public event Action SetupViewSelected;
 
         public void ArrangeInMode(WindowMode mode)
         {

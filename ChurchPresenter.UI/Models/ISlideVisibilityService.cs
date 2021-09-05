@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Models
 {
-    public interface ISlideVisibilityModel
+    public interface ISlideVisibilityService
     {
         event Action<bool> SlideVisibilityChanged;
         void SetSlideVisible(bool visible);

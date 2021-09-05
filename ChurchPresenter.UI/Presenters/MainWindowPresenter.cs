@@ -10,7 +10,7 @@ namespace ChurchPresenter.UI.Presenters
         LIVE,
     }
 
-    public interface IMainWindow
+    public interface IMainWindow : IImportView
     {
         event Action LiveViewSelected;
         event Action SetupViewSelected;

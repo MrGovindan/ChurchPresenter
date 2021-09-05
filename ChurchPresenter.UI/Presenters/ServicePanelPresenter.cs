@@ -8,7 +8,7 @@ using System.Text;
 
 namespace ChurchPresenter.UI.Presenters
 {
-    public interface IServicePanelView
+    public interface IServicePanelView : IImportView
     {
         event Action<int> FolderSelected;
         event Action FolderActivated;

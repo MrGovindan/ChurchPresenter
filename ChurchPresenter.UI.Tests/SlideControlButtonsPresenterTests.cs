@@ -165,7 +165,7 @@ namespace ChurchPresenter.UI.Tests
             var fixture = CreateFixture();
 
             // Act
-            fixture.visibilityModel.SetSlideVisible(true);
+            fixture.visibilityService.SetSlideVisible(true);
 
             // Assert
             Assert.That(fixture.view.HideEnabled, Is.True);
@@ -179,7 +179,7 @@ namespace ChurchPresenter.UI.Tests
             var fixture = CreateFixture();
 
             // Act
-            fixture.visibilityModel.SetSlideVisible(false);
+            fixture.visibilityService.SetSlideVisible(false);
 
             // Assert
             Assert.That(fixture.view.HideEnabled, Is.False);
@@ -197,7 +197,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.FireSlideShown();
 
             // Assert
-            Assert.That(fixture.visibilityModel.IsSlideVisible(), Is.True);
+            Assert.That(fixture.visibilityService.IsSlideVisible(), Is.True);
         }
 
         [Test]
@@ -211,7 +211,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.view.FireSlideHidden();
 
             // Assert
-            Assert.That(fixture.visibilityModel.IsSlideVisible(), Is.False);
+            Assert.That(fixture.visibilityService.IsSlideVisible(), Is.False);
         }
 
         struct LiveSlideControlButtonsPresenterTestFixture
@@ -219,7 +219,7 @@ namespace ChurchPresenter.UI.Tests
             internal ISelectedFolderService selectedFolderService;
             internal IDisplayedSlideService displayedSlideService;
             internal StubLiveSlideControlButtonsView view;
-            internal ISlideVisibilityModel visibilityModel;
+            internal ISlideVisibilityService visibilityService;
             internal LiveSlideControlButtonsPresenter sut;
         }
 
@@ -248,8 +248,8 @@ namespace ChurchPresenter.UI.Tests
             fixture.selectedFolderService = new SelectedFolderService();
             fixture.displayedSlideService = new DisplayedSlideService();
             fixture.view = new StubLiveSlideControlButtonsView();
-            fixture.visibilityModel = new SlideVisibilityModel();
-            fixture.sut = new LiveSlideControlButtonsPresenter(fixture.view, fixture.selectedFolderService, fixture.displayedSlideService, fixture.visibilityModel);
+            fixture.visibilityService = new SlideVisibilityService();
+            fixture.sut = new LiveSlideControlButtonsPresenter(fixture.view, fixture.selectedFolderService, fixture.displayedSlideService, fixture.visibilityService);
 
             return fixture;
         }

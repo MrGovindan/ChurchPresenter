@@ -43,7 +43,7 @@ namespace ChurchPresenter.UI.Tests
             fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
 
             // Act
-            fixture.slideVisibilityModel.SlideVisibilityChanged += Raise.Event<Action<bool>>(false);
+            fixture.slideVisibilityService.SlideVisibilityChanged += Raise.Event<Action<bool>>(false);
 
             // Assert
             fixture.outputWriter.Received().Write(Arg.Is(expectedJson.ToString()));
@@ -59,11 +59,11 @@ namespace ChurchPresenter.UI.Tests
             expectedJson["text"] = "test";
             expectedJson["caption"] = "";
 
-            fixture.slideVisibilityModel.SlideVisibilityChanged += Raise.Event<Action<bool>>(false);
+            fixture.slideVisibilityService.SlideVisibilityChanged += Raise.Event<Action<bool>>(false);
             fixture.displayedSlideService.DisplayedSlideChanged += Raise.Event<Action<Slide>>(testSlide[0]);
 
             // Act
-            fixture.slideVisibilityModel.SlideVisibilityChanged += Raise.Event<Action<bool>>(true);
+            fixture.slideVisibilityService.SlideVisibilityChanged += Raise.Event<Action<bool>>(true);
 
             // Assert
             fixture.outputWriter.Received().Write(Arg.Is(expectedJson.ToString()));
@@ -80,7 +80,7 @@ namespace ChurchPresenter.UI.Tests
         struct WebBrowserProjectorTestFixture
         {
             internal IDisplayedSlideService displayedSlideService;
-            internal ISlideVisibilityModel slideVisibilityModel;
+            internal ISlideVisibilityService slideVisibilityService;
             internal IWriter<string> outputWriter;
             internal WebBrowserProjector sut;
         }
@@ -89,9 +89,9 @@ namespace ChurchPresenter.UI.Tests
         {
             var fixture = new WebBrowserProjectorTestFixture();
             fixture.displayedSlideService = Substitute.For<IDisplayedSlideService>();
-            fixture.slideVisibilityModel = Substitute.For<ISlideVisibilityModel>();
+            fixture.slideVisibilityService = Substitute.For<ISlideVisibilityService>();
             fixture.outputWriter = Substitute.For<IWriter<string>>();
-            fixture.sut = new WebBrowserProjector(fixture.displayedSlideService, fixture.slideVisibilityModel, new BasicSlideEncoder(), fixture.outputWriter);
+            fixture.sut = new WebBrowserProjector(fixture.displayedSlideService, fixture.slideVisibilityService, new BasicSlideEncoder(), fixture.outputWriter);
             return fixture;
         }
     }

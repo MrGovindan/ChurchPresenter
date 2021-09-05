@@ -45,6 +45,20 @@
                     <Button.ToolTip><TextBlock>Move item to the bottom of the service</TextBlock></Button.ToolTip>
                 </Button>
             </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Name="ImportService"><iconpacks:PackIconMaterial Kind="FolderOpen"/>
+                    <Button.ToolTip>
+                        <TextBlock>Import from an OpenLP Service file</TextBlock></Button.ToolTip>
+                </Button>
+            </StackPanel>
         </Grid>
         <ListBox Grid.Row="1" Name="ServiceList">
         </ListBox>

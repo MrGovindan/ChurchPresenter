@@ -14,9 +14,9 @@ namespace ChurchPresenter.UI.Models
 
         public WebBrowserProjector(
             [KeyFilter("Live")] IDisplayedSlideService selectedSlidePublisher,
-            ISlideVisibilityModel slideVisibilityPublisher,
+            ISlideVisibilityService slideVisibilityService,
             ISlideEncoder slideEncoder,
-            IWriter<string> output)
+            [KeyFilter("WebSocketServer")] IWriter<string> output)
         {
             blankSlide["text"] = "";
             blankSlide["caption"] = "";
@@ -29,7 +29,7 @@ namespace ChurchPresenter.UI.Models
                 currentSlide = json.ToString();
                 Show();
             };
-            slideVisibilityPublisher.SlideVisibilityChanged += visible =>
+            slideVisibilityService.SlideVisibilityChanged += visible =>
             {
                 slideVisible = visible;
                 Show();
