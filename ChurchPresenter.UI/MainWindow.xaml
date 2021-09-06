@@ -8,7 +8,7 @@
         Background="#F0F0F0"
         Width="1280"
         Height="720"
-        Title="MainWindow">
+        Title="ChurchPresenter">
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
