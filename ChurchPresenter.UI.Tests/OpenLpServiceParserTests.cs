@@ -16,9 +16,9 @@ namespace ChurchPresenter.UI.Tests
         public void ReadTestFile()
         {
             // Once off testing
-            // testData = System.IO.File.ReadAllText("..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
+            testData = System.IO.File.ReadAllText("..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
             // Live Unit Testing
-            testData = System.IO.File.ReadAllText("..\\..\\..\\..\\..\\..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
+            // testData = System.IO.File.ReadAllText("..\\..\\..\\..\\..\\..\\..\\..\\..\\ChurchPresenter.UI.Tests\\Resources\\test.osj");
         }
 
         [Test]
@@ -100,8 +100,10 @@ namespace ChurchPresenter.UI.Tests
             // Assert
             Assert.That(actual.GetTitle(), Is.EqualTo("1 Kings 19:2-3 CEV"));
             Assert.That(actual.GetSlides().Length, Is.EqualTo(2));
+            Assert.That(actual.GetSlides()[0].GetCaption(), Is.EqualTo("1 Kings 19:2 (CEV)"));
             Assert.That(actual.GetSlides()[0].GetParts()[0].Text, Is.EqualTo("19:2"));
             Assert.That(actual.GetSlides()[0].GetParts()[1].Text, Is.EqualTo("She sent a message to Elijah: \"You killed my prophets. Now I'm going to kill you! I pray that the gods will punish me even more severely if I don't do it by this time tomorrow.\""));
+            Assert.That(actual.GetSlides()[1].GetCaption(), Is.EqualTo("1 Kings 19:3 (CEV)"));
             Assert.That(actual.GetSlides()[1].GetParts()[0].Text, Is.EqualTo("19:3"));
             Assert.That(actual.GetSlides()[1].GetParts()[1].Text, Is.EqualTo("Elijah was afraid when he got her message, and he ran to the town of Beersheba in Judah. He left his servant there,"));
         }

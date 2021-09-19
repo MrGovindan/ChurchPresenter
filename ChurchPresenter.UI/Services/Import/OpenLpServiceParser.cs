@@ -40,7 +40,9 @@ namespace ChurchPresenter.UI.Services.Import
             }
             else
             {
-                var folder = new ScriptureFolder { title = header["title"].ToString() };
+                var title = header["title"].ToString();
+                var folder = new ScriptureFolder { title = title };
+                var version = title.Substring(title.LastIndexOf(" ") + 1);
 
                 var versePattern = new Regex(@"(\d+):(\d+)");
                 var bookPattern = new Regex(@"((\d\s)?([a-z]+))");
@@ -76,7 +78,7 @@ namespace ChurchPresenter.UI.Services.Import
                                 TextPart.AsSuperscript(string.Format("{0}:{1}", verse.chapter, verse.verse)),
                                 TextPart.AsNormal(scripture)
                             };
-                            slides.Add(new Slide(scriptureParts, ""));
+                            slides.Add(new Slide(scriptureParts, string.Format("{0} {1}:{2} ({3})", BookHelper.ToString((Book)book), verse.chapter, verse.verse, version)));
                         }
                     }
                 }
